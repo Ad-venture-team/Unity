@@ -12,7 +12,7 @@ public class MonsterData : ScriptableObject, IData
     [TabGroup("Stat")] public float movementSpeed;
     [TabGroup("Stat")] public float damage;
 
-    [TabGroup("Stat")] public float attackRange;
+    [TabGroup("Stat")] public float attackVision;
     [TabGroup("Stat")] public float attackSpeed;
     [TabGroup("Stat")] public float incantationTime;
 
@@ -24,7 +24,7 @@ public class MonsterData : ScriptableObject, IData
     [TabGroup("Visual")] public Sprite icon;
     [TabGroup("Visual")] public RuntimeAnimatorController animationController;
 
-    //TODO : MonsterAttackBehaviour
+    [SerializeReference] public MonsterAttack attack;
 
     public int GetId()
     {

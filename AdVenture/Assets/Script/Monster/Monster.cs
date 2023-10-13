@@ -79,6 +79,7 @@ public class Monster : MonoBehaviour
 
     public void LaunchAttack()
     {
+        data.attack.DoAttack(this, target);
         transform.DOPunchPosition((target.position - transform.position).normalized,.2f);
         attackDelay = data.attackSpeed;
     }
@@ -94,7 +95,7 @@ public class Monster : MonoBehaviour
     public bool IsInAttackRange()
     {
         float dist = Vector2.Distance(transform.position, target.position);
-        if (dist <= data.attackRange)
+        if (dist <= data.attackVision)
             return true;
 
         return false;
@@ -109,6 +110,7 @@ public class Monster : MonoBehaviour
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, data.visionRange);
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, data.attackRange);
+        Gizmos.DrawWireSphere(transform.position, data.attackVision);
+        data.attack.DrawGizmo(this);
     }
 }
