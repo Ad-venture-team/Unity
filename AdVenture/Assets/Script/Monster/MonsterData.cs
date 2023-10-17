@@ -1,5 +1,5 @@
 using UnityEngine;
-using Sirenix.OdinInspector;
+using System.Collections.Generic;
 
 [CreateAssetMenu(fileName ="M_",menuName ="Data/Monster")]
 public class MonsterData : ScriptableObject, IData
@@ -8,23 +8,12 @@ public class MonsterData : ScriptableObject, IData
 
     public string name;
 
-    [TabGroup("Stat")] public float health;
-    [TabGroup("Stat")] public float movementSpeed;
-    [TabGroup("Stat")] public float damage;
+    public float health;
 
-    [TabGroup("Stat")] public float attackVision;
-    [TabGroup("Stat")] public float attackSpeed;
-    [TabGroup("Stat")] public float incantationTime;
+    public Sprite icon;
+    public RuntimeAnimatorController animationController;
 
-    [TabGroup("Roam")] public float roamRange;
-    [TabGroup("Roam")] public float roamSpeed;
-    [TabGroup("Roam")] public float waitingTime;
-    [TabGroup("Roam")] public float visionRange;
-
-    [TabGroup("Visual")] public Sprite icon;
-    [TabGroup("Visual")] public RuntimeAnimatorController animationController;
-
-    [SerializeReference] public MonsterAttack attack;
+    [SerializeReference] public List<MonsterAction> actions = new List<MonsterAction>();
 
     public int GetId()
     {

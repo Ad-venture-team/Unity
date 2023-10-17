@@ -15,28 +15,62 @@ MonoBehaviour:
   id: 0
   name: Debug
   health: 0
-  movementSpeed: 4.2
-  damage: 0
-  attackVision: 20
-  attackSpeed: 0.2
-  incantationTime: 0
-  roamRange: 5
-  roamSpeed: 2.7
-  waitingTime: 1
-  visionRange: 30
   icon: {fileID: 0}
   animationController: {fileID: 0}
-  attack:
-    rid: 2109089010113052672
+  actions:
+  - rid: 2109089105647763464
+  - rid: 2109089106644697088
+  - rid: 2109089106644697090
+  - rid: 2109089106644697100
   references:
     version: 2
     RefIds:
-    - rid: 2109089010113052672
-      type: {class: MonsterAttackProjectile, ns: , asm: Assembly-CSharp}
+    - rid: 2109089105647763464
+      type: {class: MonsterActionAttackProjectile, ns: , asm: Assembly-CSharp}
       data:
+        condition:
+        - rid: 2109089106644697098
         projectilePrefab: {fileID: 2241710670611700990, guid: 508c62d84ea5a084a9da99f9dd50e650, type: 3}
+        projectileSpeed: 3
         icon: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
         nProjectile: 3
         angle: 90
         randomAngle: 0
-        projectileSpeed: 100
+        attackSpeed: 1.2
+        previewTime: 0
+    - rid: 2109089106644697088
+      type: {class: MonsterActionChase, ns: , asm: Assembly-CSharp}
+      data:
+        condition:
+        - rid: 2109089106644697089
+        speed: 5
+    - rid: 2109089106644697089
+      type: {class: MonsterActionConditionFarFromPlayer, ns: , asm: Assembly-CSharp}
+      data:
+        distance: {x: 5, y: 30}
+    - rid: 2109089106644697090
+      type: {class: MonsterActionFlee, ns: , asm: Assembly-CSharp}
+      data:
+        condition:
+        - rid: 2109089106644697091
+        speed: 3
+    - rid: 2109089106644697091
+      type: {class: MonsterActionConditionNearPlayer, ns: , asm: Assembly-CSharp}
+      data:
+        distance: {x: 0, y: 10}
+    - rid: 2109089106644697098
+      type: {class: MonsterActionConditionNearPlayer, ns: , asm: Assembly-CSharp}
+      data:
+        distance: {x: 5, y: 10}
+    - rid: 2109089106644697100
+      type: {class: MonsterActionRoam, ns: , asm: Assembly-CSharp}
+      data:
+        condition:
+        - rid: 2109089106644697101
+        speed: 3.4
+        range: 3
+        waitingTime: 0.3
+    - rid: 2109089106644697101
+      type: {class: MonsterActionConditionFarFromPlayer, ns: , asm: Assembly-CSharp}
+      data:
+        distance: {x: 30, y: 50}

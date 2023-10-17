@@ -99,9 +99,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b84dfaff2f6cb65409613a8d8b478828, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: f2b7cefe960a9ac419d5b675a0cee100, type: 2}
+  data: {fileID: 0}
   target: {fileID: 0}
-  roamThreshold: 0.5
 --- !u!50 &4597990639277657742
 Rigidbody2D:
   serializedVersion: 4

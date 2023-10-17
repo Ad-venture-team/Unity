@@ -400,9 +400,45 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4597990639277657778, guid: 62cccd157a86ec644b7a404dcabef658, type: 3}
+      propertyPath: data
+      value: 
+      objectReference: {fileID: 11400000, guid: f2b7cefe960a9ac419d5b675a0cee100, type: 2}
+    - target: {fileID: 4597990639277657778, guid: 62cccd157a86ec644b7a404dcabef658, type: 3}
       propertyPath: target
       value: 
       objectReference: {fileID: 191442268}
+    - target: {fileID: 4597990639277657778, guid: 62cccd157a86ec644b7a404dcabef658, type: 3}
+      propertyPath: allAction.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4597990639277657778, guid: 62cccd157a86ec644b7a404dcabef658, type: 3}
+      propertyPath: allAction.Array.data[0]
+      value: 2109089105647763456
+      objectReference: {fileID: 0}
+    - target: {fileID: 4597990639277657778, guid: 62cccd157a86ec644b7a404dcabef658, type: 3}
+      propertyPath: managedReferences[2109089105647763456]
+      value: Assembly-CSharp MonsterActionChasePlayer
+      objectReference: {fileID: 0}
+    - target: {fileID: 4597990639277657778, guid: 62cccd157a86ec644b7a404dcabef658, type: 3}
+      propertyPath: managedReferences[2109089105647763457]
+      value: Assembly-CSharp MonsterActionConditionFarFromPlayer
+      objectReference: {fileID: 0}
+    - target: {fileID: 4597990639277657778, guid: 62cccd157a86ec644b7a404dcabef658, type: 3}
+      propertyPath: managedReferences[2109089105647763456].speed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4597990639277657778, guid: 62cccd157a86ec644b7a404dcabef658, type: 3}
+      propertyPath: managedReferences[2109089105647763457].maxDistance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4597990639277657778, guid: 62cccd157a86ec644b7a404dcabef658, type: 3}
+      propertyPath: managedReferences[2109089105647763456].condition.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4597990639277657778, guid: 62cccd157a86ec644b7a404dcabef658, type: 3}
+      propertyPath: managedReferences[2109089105647763456].condition.Array.data[0]
+      value: 2109089105647763457
+      objectReference: {fileID: 0}
     - target: {fileID: 4597990639277657781, guid: 62cccd157a86ec644b7a404dcabef658, type: 3}
       propertyPath: m_Name
       value: MonsterPrefab
