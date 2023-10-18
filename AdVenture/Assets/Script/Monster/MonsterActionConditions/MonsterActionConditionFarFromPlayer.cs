@@ -15,7 +15,7 @@ public class MonsterActionConditionFarFromPlayer : MonsterActionCondition
 
         if (dist > distance.y) return 0;
 
-        result = dist / (distance.x + distance.y);
+        result = (dist - distance.x) / (distance.y - distance.x);
 
         return result;
     }

@@ -15,7 +15,7 @@ public class MonsterActionConditionNearPlayer : MonsterActionCondition
 
         if (dist > distance.y) return 0;
 
-        result = 1 - dist / (distance.x + distance.y);
+        result = 1 - (dist - distance.x) / (distance.y - distance.x);
 
         return result;
     }
