@@ -5,12 +5,28 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    public enum CharacterState
+    {
+        FREE,
+        UI,
+    }
+
+    public CharacterState characterState;
+
+
     [SerializeField] private PlayerAction playerActionControl;
+    [SerializeField] private float speed;
+    private Vector2 moovInput = new Vector2(0,0);
 
     private void Awake()
     {
         playerActionControl = new PlayerAction();
         InitEvent();
+    }
+
+    private void Update()
+    {
+        Moov(moovInput);
     }
 
     private void OnEnable()
@@ -26,31 +42,34 @@ public class PlayerController : MonoBehaviour
 
     private void InitEvent()
     {
-        playerActionControl.Player.Walk.performed += ctx => Moov(ctx.ReadValue<Vector2>());
+        playerActionControl.Player.Walk.performed += ctx => moovInput = ctx.ReadValue<Vector2>();
+        playerActionControl.Player.Walk.canceled += ctx => moovInput = Vector2.zero;
     }
 
-    private void Moov(Vector2 parametre)
+    private void Moov(Vector3 parametre)
     {
-        Vector3 positionMoov = new Vector3(0,0,0);
+        float plusX = 0;
+        float plusY = 0;
+
         switch(parametre.x)
         {
             case > 0 :
-                positionMoov.x += 1;
+                plusX = 1*speed;
                 break;
             case < 0: 
-                positionMoov.x -= 1;
+                plusX = -1 * speed;
                 break;
         }
         switch (parametre.y)
         {
             case > 0 :
-                positionMoov.y += 1;
+                plusY = 1 * speed;
                 break;
             case < 0:
-                positionMoov.y -=1 ;
+                plusY =-1 * speed;
                 break;
         }
 
-        gameObject.transform.position += new Vector3(parametre.x,parametre.y,0);
+        transform.position += parametre.normalized * speed * Time.deltaTime;
     }
 }
