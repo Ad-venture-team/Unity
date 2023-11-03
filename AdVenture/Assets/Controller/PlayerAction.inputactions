@@ -1,14 +1,14 @@
 {
-    "name": "Controller",
+    "name": "PlayerAction",
     "maps": [
         {
             "name": "Player",
-            "id": "1273caa4-fc71-45c6-88bf-ff4d8cb0f999",
+            "id": "b1989628-6dfa-4cc8-b171-06c29030ff7b",
             "actions": [
                 {
                     "name": "Walk",
                     "type": "Value",
-                    "id": "421a1452-cc88-4491-aa7b-f8d6ac306282",
+                    "id": "df99796f-8ab2-4d30-9da9-15ed406a3b5b",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
@@ -18,7 +18,7 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "04ed86c4-072e-4e1b-bf61-63b42b332d44",
+                    "id": "aea1040f-07bc-4808-a4f2-c99c507527fe",
                     "path": "<Gamepad>/leftStick",
                     "interactions": "",
                     "processors": "",
