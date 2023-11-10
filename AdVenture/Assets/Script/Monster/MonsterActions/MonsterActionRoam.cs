@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MonsterActionRoam : MonsterAction
+public class MonsterActionRoam : MonsterActionState
 {
     public float speed;
     public float range;
@@ -11,7 +11,12 @@ public class MonsterActionRoam : MonsterAction
     private float threshold = .5f;
 
     private Vector3 targetPos;
-    public override void DoAction(Monster _monster)
+
+    public override void EnterState()
+    {
+        NewRoamPosition(owner);
+    }
+    public override void UpdateState()
     {
         if(delay > 0)
         {
@@ -20,13 +25,13 @@ public class MonsterActionRoam : MonsterAction
         }
 
         if (targetPos == null)
-            NewRoamPosition(_monster);
+            NewRoamPosition(owner);
 
-        float dist = Vector2.Distance(_monster.transform.position, targetPos);
+        float dist = Vector2.Distance(owner.transform.position, targetPos);
         if (dist <= threshold)
-            NewRoamPosition(_monster);
+            NewRoamPosition(owner);
 
-        _monster.transform.position += (targetPos - _monster.transform.position).normalized * speed * Time.deltaTime;
+        owner.transform.position += (targetPos - owner.transform.position).normalized * speed * Time.deltaTime;
 
     }
 

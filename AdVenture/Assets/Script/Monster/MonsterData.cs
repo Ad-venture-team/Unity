@@ -13,7 +13,7 @@ public class MonsterData : ScriptableObject, IData
     public Sprite icon;
     public RuntimeAnimatorController animationController;
 
-    [SerializeReference] public List<MonsterAction> actions = new List<MonsterAction>();
+    [SerializeReference] public List<MonsterActionState> actions = new List<MonsterActionState>();
 
     public int GetId()
     {

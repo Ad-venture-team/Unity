@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class MonsterActionAttackProjectile : MonsterAction
+public class MonsterActionAttackProjectile : MonsterActionState
 {
     public MonsterProjectile projectilePrefab;
     public float projectileSpeed;
@@ -16,8 +16,11 @@ public class MonsterActionAttackProjectile : MonsterAction
 
     private float delay;
 
-
-    public override void DoAction(Monster _monster)
+    public override void EnterState()
+    {
+        delay = attackSpeed;
+    }
+    public override void UpdateState()
     {
         if (delay > 0)
         {
@@ -33,10 +36,10 @@ public class MonsterActionAttackProjectile : MonsterAction
             else
                 currentAngle = ((angle / (nProjectile - 1)) * i) - (angle / 2);
 
-            Vector2 targetDir = _monster.transform.position + Quaternion.Euler(0, 0, currentAngle) * (_monster.target.position - _monster.transform.position).normalized;
+            Vector2 targetDir = owner.transform.position + Quaternion.Euler(0, 0, currentAngle) * (owner.target.position - owner.transform.position).normalized;
 
             MonsterProjectile newProjectile = GameObject.Instantiate(projectilePrefab);
-            newProjectile.InitVector(targetDir, _monster.transform.position);
+            newProjectile.InitVector(targetDir, owner.transform.position);
             newProjectile.Init(projectileSpeed);
             newProjectile.SetIcon(icon);
         }
