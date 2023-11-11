@@ -36,8 +36,9 @@ MonoBehaviour:
         nProjectile: 3
         angle: 90
         randomAngle: 0
-        attackSpeed: 1.2
-        previewTime: 0
+        attackSpeed: 1.09
+        previewTime: 2.77
+        previewPrefab: {fileID: 1408173444559121196, guid: ddfc1ab2f3d8b0a409c1a0d7437e7101, type: 3}
     - rid: 2109089106644697088
       type: {class: MonsterActionChase, ns: , asm: Assembly-CSharp}
       data:
