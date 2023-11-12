@@ -8,7 +8,7 @@ public class Monster : MonoBehaviour
     public Transform target;
 
     private List<MonsterActionState> allAction;
-    private MonsterActionState currentState;
+    public MonsterActionState currentState;
     public bool lockInState;
 
     private void Awake()
@@ -20,10 +20,10 @@ public class Monster : MonoBehaviour
     public void SetData(MonsterData _data)
     {
         data = _data;
-        allAction = data.actions;
+        allAction = data.GetActions();
     }
 
-    void Update()
+    void FixedUpdate()
     {
         currentState?.UpdateState(this);
 
@@ -37,7 +37,7 @@ public class Monster : MonoBehaviour
 
         ChangeState(action);
 
-        Debug.Log("DoAction : " + action.GetType().Name + " || " + action.Evaluate(this));
+        //Debug.Log("DoAction : " + action.GetType().Name + " || " + action.Evaluate(this));
     }
 
     private MonsterActionState SelectAction()

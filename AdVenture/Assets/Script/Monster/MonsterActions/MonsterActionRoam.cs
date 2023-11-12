@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
+[Serializable]
 public class MonsterActionRoam : MonsterActionState
 {
     public float speed;
@@ -37,10 +39,18 @@ public class MonsterActionRoam : MonsterActionState
 
     public void NewRoamPosition(Monster _monster)
     {
-        targetPos = _monster.transform.position + Random.insideUnitSphere * range;
+        targetPos = _monster.transform.position + UnityEngine.Random.insideUnitSphere * range;
         targetPos.z = 0;
         delay = waitingTime;
     }
 
-
+    public override MonsterActionState GetCopy()
+    {
+        MonsterActionRoam copy = new MonsterActionRoam();
+        copy.condition = new List<MonsterActionCondition>(condition);
+        copy.speed = speed;
+        copy.range = range;
+        copy.waitingTime = waitingTime;
+        return copy;
+    }
 }

@@ -19,4 +19,12 @@ public class MonsterData : ScriptableObject, IData
     {
         return id;
     }
+
+    public List<MonsterActionState> GetActions()
+    {
+        List<MonsterActionState> states = new List<MonsterActionState>();
+        foreach (MonsterActionState MAS in actions)
+            states.Add(MAS.GetCopy());
+        return states;
+    }
 }

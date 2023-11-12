@@ -29,4 +29,6 @@ public abstract class MonsterActionState
     public virtual void EnterState(Monster _monster) { }
     public virtual void UpdateState(Monster _monster) { }
     public virtual void ExitState(Monster _monster) { }
+
+    public abstract MonsterActionState GetCopy();
 }

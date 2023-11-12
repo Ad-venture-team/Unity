@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
+[Serializable]
 public class MonsterActionAttackProjectile : MonsterActionState
 {
     public MonsterProjectile projectilePrefab;
@@ -58,7 +60,7 @@ public class MonsterActionAttackProjectile : MonsterActionState
         {
             int currentAngle;
             if (randomAngle)
-                currentAngle = Random.Range(-angle / 2, angle / 2);
+                currentAngle = UnityEngine.Random.Range(-angle / 2, angle / 2);
             else
                 currentAngle = ((angle / (nProjectile - 1)) * i) - (angle / 2);
             angles.Add(currentAngle);
@@ -93,4 +95,25 @@ public class MonsterActionAttackProjectile : MonsterActionState
             currentPreview.SetValue(previewTime, () => LaunchAttack(_monster, currentAngle));
         }
     }
+
+    public override MonsterActionState GetCopy()
+    {
+        MonsterActionAttackProjectile copy = new MonsterActionAttackProjectile();
+
+        copy.condition = new List<MonsterActionCondition>(condition);
+        copy.projectilePrefab = projectilePrefab;
+        copy.projectileSpeed = projectileSpeed;
+        copy.icon = icon;
+
+
+        copy.nProjectile = nProjectile;
+        copy.angle = angle;
+        copy.randomAngle= randomAngle;
+
+        copy.attackSpeed= attackSpeed;
+        copy.previewTime= previewTime;
+        copy.previewPrefab = previewPrefab;
+
+        return copy;
+}
 }
