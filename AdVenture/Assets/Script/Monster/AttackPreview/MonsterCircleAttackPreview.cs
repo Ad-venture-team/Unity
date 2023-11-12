@@ -14,9 +14,14 @@ public class MonsterCircleAttackPreview : MonoBehaviour
     private Mesh mesh;
 
     private float maxDuration;
-    public float duration;
+    private float duration;
 
     List<Vector2> points = new List<Vector2>();
+
+    private void OnDestroy()
+    {
+        StopAllCoroutines();
+    }
 
     private void Update()
     {
@@ -28,7 +33,6 @@ public class MonsterCircleAttackPreview : MonoBehaviour
         mesh.name = "NewMesh";
         meshFilter.mesh = mesh;
         meshRenderer.sharedMaterial.SetFloat("_Range", _radius);
-        transform.SetParent(_origine);
         Vector2 relativeOrigine = _origine.position - transform.position;
         Vector2 relativeDir = _dir - (Vector2)transform.position;
         points = new List<Vector2>();
@@ -108,20 +112,5 @@ public class MonsterCircleAttackPreview : MonoBehaviour
     private void ChangeShaderValue(float t)
     {
         meshRenderer.sharedMaterial.SetFloat("_Value", t);
-    }
-
-    private struct ViewCastInfo
-    {
-        public bool hit;
-        public Vector3 point;
-        public float dst;
-        public float angle;
-        public ViewCastInfo(bool _hit, Vector3 _point,float _dst, float _angle)
-        {
-            hit = _hit;
-            point = _point;
-            dst = _dst;
-            angle = _angle;
-        }
     }
 }

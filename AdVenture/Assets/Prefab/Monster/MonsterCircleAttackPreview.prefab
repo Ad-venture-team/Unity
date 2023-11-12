@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1408173444559121194}
   - component: {fileID: 1408173444559121196}
   m_Layer: 0
-  m_Name: MonsterAttackPreview
+  m_Name: MonsterCircleAttackPreview
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

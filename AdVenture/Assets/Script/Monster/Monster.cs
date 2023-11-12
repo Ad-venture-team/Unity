@@ -25,7 +25,7 @@ public class Monster : MonoBehaviour
 
     void Update()
     {
-        currentState?.UpdateState();
+        currentState?.UpdateState(this);
 
         if (lockInState)
             return;
@@ -60,10 +60,9 @@ public class Monster : MonoBehaviour
 
     private void ChangeState(MonsterActionState newState)
     {
-        currentState?.ExitState();
+        currentState?.ExitState(this);
         currentState = newState;
-        currentState.SetMonster(this);
-        currentState?.EnterState();
+        currentState?.EnterState(this);
     }
 
     public void SetTarget(Transform _target)

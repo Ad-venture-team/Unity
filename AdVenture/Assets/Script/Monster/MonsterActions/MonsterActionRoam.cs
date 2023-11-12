@@ -12,11 +12,11 @@ public class MonsterActionRoam : MonsterActionState
 
     private Vector3 targetPos;
 
-    public override void EnterState()
+    public override void EnterState(Monster _monster)
     {
-        NewRoamPosition(owner);
+        NewRoamPosition(_monster);
     }
-    public override void UpdateState()
+    public override void UpdateState(Monster _monster)
     {
         if(delay > 0)
         {
@@ -25,13 +25,13 @@ public class MonsterActionRoam : MonsterActionState
         }
 
         if (targetPos == null)
-            NewRoamPosition(owner);
+            NewRoamPosition(_monster);
 
-        float dist = Vector2.Distance(owner.transform.position, targetPos);
+        float dist = Vector2.Distance(_monster.transform.position, targetPos);
         if (dist <= threshold)
-            NewRoamPosition(owner);
+            NewRoamPosition(_monster);
 
-        owner.transform.position += (targetPos - owner.transform.position).normalized * speed * Time.deltaTime;
+        _monster.transform.position += (targetPos - _monster.transform.position).normalized * speed * Time.deltaTime;
 
     }
 

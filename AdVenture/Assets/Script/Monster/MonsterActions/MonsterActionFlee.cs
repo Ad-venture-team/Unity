@@ -5,13 +5,13 @@ using UnityEngine;
 public class MonsterActionFlee : MonsterActionState
 {
     public float speed;
-    public override void UpdateState()
+    public override void UpdateState(Monster _monster)
     {
-        if (owner.target == null)
+        if (_monster.target == null)
             return;
 
         //Voir pour mettre un A* ici
 
-        owner.transform.position += (owner.transform.position - owner.target.position).normalized * speed * Time.deltaTime;
+        _monster.transform.position += (_monster.transform.position - _monster.target.position).normalized * speed * Time.deltaTime;
     }
 }
