@@ -27,20 +27,21 @@ public class MonsterCircleAttackPreview : MonoBehaviour
     {
         duration += Time.deltaTime;
     }
-    public void DrawCirclePreview(Transform _origine, Vector2 _dir, float _angle, float _radius)
+    public void DrawCirclePreview(Vector2 _origine, Vector2 _dir, float _angle, float _radius)
     {
         mesh = new Mesh();
         mesh.name = "NewMesh";
         meshFilter.mesh = mesh;
+        transform.position = _origine;
         meshRenderer.sharedMaterial.SetFloat("_Range", _radius);
-        Vector2 relativeOrigine = _origine.position - transform.position;
+        Vector2 relativeOrigine = _origine - (Vector2)transform.position;
         Vector2 relativeDir = _dir - (Vector2)transform.position;
         points = new List<Vector2>();
-        points.AddRange(CalculateMesh(relativeOrigine, relativeDir, _angle, _radius));
+        points.AddRange(CalculateMesh(relativeOrigine, _dir, _angle, _radius));
         DrawMesh(points);
     }
 
-    private List<Vector2> CalculateMesh(Vector2 _origine, Vector2 _dir, float _angle, float _radius)
+    private List<Vector2> CalculateMesh(Vector3 _origine, Vector2 _dir, float _angle, float _radius)
     {
 
         List<Vector2> points = new List<Vector2>();
@@ -50,13 +51,14 @@ public class MonsterCircleAttackPreview : MonoBehaviour
         for (int i = 0; i <= nRay; i++)
         {
             float currentAngle = ((_angle / (nRay - 1)) * i) - (_angle / 2);
-            Vector3 targetDir = (Vector3)_origine + Quaternion.Euler(0, 0, currentAngle) * _dir;
-            //Debug.DrawLine(transform.position, transform.position + targetDir.normalized * _radius,Color.red,5);
+            Vector3 targetDir = _origine + Quaternion.Euler(0, 0, currentAngle) * _dir;
+            Debug.DrawLine(transform.position, transform.position + targetDir.normalized * _radius,Color.red,5);
 
-            RaycastHit hit;
+            RaycastHit2D hit;
             Vector3 result;
-            if (Physics.Raycast(transform.position, targetDir.normalized, out hit, _radius, raycastLayer))
-                result = hit.point;
+            hit = Physics2D.Raycast(transform.position, targetDir.normalized, _radius, raycastLayer);
+            if (hit.collider != null)
+                result = transform.InverseTransformPoint(hit.point);
             else
                 result = targetDir.normalized * _radius;
 

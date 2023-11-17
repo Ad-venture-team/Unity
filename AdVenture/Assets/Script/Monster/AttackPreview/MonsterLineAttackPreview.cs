@@ -26,11 +26,12 @@ public class MonsterLineAttackPreview : MonoBehaviour
     {
         duration += Time.deltaTime;
     }
-    public void DrawLinePreview(Transform _transform, Vector2 _origine, Vector2 _dir, float _range, float _width)
+    public void DrawLinePreview(Vector2 _origine, Vector2 _dir, float _range, float _width)
     {
         mesh = new Mesh();
         mesh.name = "NewMesh";
         meshFilter.mesh = mesh;
+        transform.position = _origine;
         meshRenderer.sharedMaterial.SetFloat("_Range", _range);
         Vector2 relativeOrigine = _origine - (Vector2)transform.position;
         Vector2 relativeDir = _dir - (Vector2)transform.position;
@@ -39,41 +40,42 @@ public class MonsterLineAttackPreview : MonoBehaviour
         DrawMesh(points);
     }
 
-    private List<Vector2> CalculateMesh(Vector2 _origine, Vector3 _dir, float _range, float _width)
+    private List<Vector2> CalculateMesh(Vector3 _origine, Vector3 _dir, float _range, float _width)
     {
 
         List<Vector2> points = new List<Vector2>();
 
         //Calculate maxRange
         Vector3 targetDir;// = (Vector3)_origine * _dir;
-        RaycastHit hit;
+        RaycastHit2D hit;
         Vector3 maxRange;
-        Debug.DrawLine(transform.position, transform.position + _dir.normalized * _range, Color.red,5);
-        if (Physics.Raycast(transform.position, _dir.normalized, out hit, _range, raycastLayer))
-            maxRange = hit.point;
+        //Debug.DrawLine(transform.position, transform.position + _dir.normalized * _range, Color.red,5);
+        hit = Physics2D.Raycast(transform.position, _dir.normalized, _range, raycastLayer);
+        if (hit.collider != null)
+            maxRange = transform.InverseTransformPoint(hit.point);
         else
             maxRange = _dir.normalized * _range;
 
         //P0
-        targetDir = Quaternion.Euler(0, 0, 90) * _dir.normalized;
+        targetDir = _origine + Quaternion.Euler(0, 0, 90) * _dir.normalized;
         Debug.DrawLine(transform.position, transform.position + targetDir.normalized * _width/2, Color.green, 5);
         Vector2 p0 = targetDir * _width/2;
         points.Add(p0);
 
         //P1
-        targetDir = Quaternion.Euler(0, 0, -90) * _dir.normalized;
+        targetDir = _origine + Quaternion.Euler(0, 0, -90) * _dir.normalized;
         Debug.DrawLine(transform.position, transform.position + targetDir.normalized * _width / 2, Color.green, 5);
         Vector2 p1 = targetDir * _width / 2;
         points.Add(p1);
 
         //P3
-        targetDir = Quaternion.Euler(0, 0, -90) * _dir.normalized;
+        targetDir = _origine + Quaternion.Euler(0, 0, -90) * _dir.normalized;
         Debug.DrawLine(transform.position, transform.position + targetDir.normalized * _width / 2, Color.green, 5);
         Vector2 p3 = maxRange + targetDir * _width / 2;
         points.Add(p3);
 
         //P2
-        targetDir = Quaternion.Euler(0, 0, 90) * _dir.normalized;
+        targetDir = _origine + Quaternion.Euler(0, 0, 90) * _dir.normalized;
         Debug.DrawLine(transform.position, transform.position + targetDir.normalized * _width / 2, Color.green, 5);
         Vector2 p2 = maxRange + targetDir * _width / 2;
         points.Add(p2);

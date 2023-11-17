@@ -11,7 +11,8 @@ public class MonsterActionAttackProjectile : MonsterActionState
 
 
     public int nProjectile;
-    public int angle;
+    public float range;
+    public float angle;
     public bool randomAngle;
 
     public float attackSpeed;
@@ -22,7 +23,7 @@ public class MonsterActionAttackProjectile : MonsterActionState
     public MonsterLineAttackPreview previewPrefab;
     private List<MonsterLineAttackPreview> previews = new List<MonsterLineAttackPreview>();
     private Vector2 direction;
-    private List<int> angles = new List<int>();
+    private List<float> angles = new List<float>();
     private bool isCasting = false;
 
     public override void EnterState(Monster _monster)
@@ -32,7 +33,10 @@ public class MonsterActionAttackProjectile : MonsterActionState
     }
     public override void UpdateState(Monster _monster)
     {
-        if (delay > 0 || isCasting)
+        if (isCasting)
+            return;
+
+        if (delay > 0)
         {
             delay -= Time.deltaTime;
             return;
@@ -58,7 +62,7 @@ public class MonsterActionAttackProjectile : MonsterActionState
         angles.Clear();
         for (int i = 0; i < nProjectile; i++)
         {
-            int currentAngle;
+            float currentAngle;
             if (randomAngle)
                 currentAngle = UnityEngine.Random.Range(-angle / 2, angle / 2);
             else
@@ -67,13 +71,13 @@ public class MonsterActionAttackProjectile : MonsterActionState
         }
     }
 
-    private void LaunchAttack(Monster _monster,int _angle)
+    private void LaunchAttack(Monster _monster, float _angle)
     {
         Vector2 targetDir = _monster.transform.position + Quaternion.Euler(0, 0, _angle) * direction;
 
         MonsterProjectile newProjectile = GameObject.Instantiate(projectilePrefab);
         newProjectile.InitVector(targetDir, _monster.transform.position);
-        newProjectile.Init(projectileSpeed);
+        newProjectile.Init(projectileSpeed, range);
         newProjectile.SetIcon(icon);
         delay = attackSpeed;
         isCasting = false;
@@ -84,14 +88,14 @@ public class MonsterActionAttackProjectile : MonsterActionState
         isCasting = true;
         for (int i = 0; i < angles.Count; i++)
         {
-            int currentAngle = angles[i];
+            float currentAngle = angles[i];
             MonsterLineAttackPreview currentPreview;
             if (i >= previews.Count)
                 previews.Add(GameObject.Instantiate(previewPrefab, _monster.transform));
 
             currentPreview = previews[i];
             Vector2 targetDir = Quaternion.Euler(0, 0, currentAngle) * direction;
-            currentPreview.DrawLinePreview(_monster.transform, _monster.transform.position, targetDir, 10, 1);
+            currentPreview.DrawLinePreview(_monster.transform.position, targetDir, range, 1);
             currentPreview.SetValue(previewTime, () => LaunchAttack(_monster, currentAngle));
         }
     }
@@ -107,6 +111,7 @@ public class MonsterActionAttackProjectile : MonsterActionState
 
 
         copy.nProjectile = nProjectile;
+        copy.range = range;
         copy.angle = angle;
         copy.randomAngle= randomAngle;
 

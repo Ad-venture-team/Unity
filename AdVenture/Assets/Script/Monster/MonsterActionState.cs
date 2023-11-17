@@ -20,12 +20,6 @@ public abstract class MonsterActionState
         return result;
     }
 
-    public void OnDoAction()
-    {
-        foreach (MonsterActionCondition MAC in condition)
-            MAC.OnDoAction();
-    }
-
     public virtual void EnterState(Monster _monster) { }
     public virtual void UpdateState(Monster _monster) { }
     public virtual void ExitState(Monster _monster) { }

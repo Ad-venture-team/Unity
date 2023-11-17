@@ -19,7 +19,7 @@ MonoBehaviour:
   animationController: {fileID: 0}
   actions:
   - rid: 2829484606340464666
-  - rid: 2829484606340464668
+  - rid: 2829484723882950658
   references:
     version: 2
     RefIds:
@@ -32,22 +32,23 @@ MonoBehaviour:
     - rid: 2829484606340464667
       type: {class: MonsterActionConditionNearPlayer, ns: , asm: Assembly-CSharp}
       data:
-        distance: {x: 5, y: 15}
-    - rid: 2829484606340464668
+        distance: {x: 10, y: 20}
+    - rid: 2829484723882950658
       type: {class: MonsterActionAttackProjectile, ns: , asm: Assembly-CSharp}
       data:
         condition:
-        - rid: 2829484606340464669
+        - rid: 2829484723882950659
         projectilePrefab: {fileID: 2241710670611700990, guid: 508c62d84ea5a084a9da99f9dd50e650, type: 3}
-        projectileSpeed: 5
+        projectileSpeed: 10
         icon: {fileID: -2741756353435428437, guid: 72f7a32ac9c7676409eb438757bc6b4a, type: 3}
-        nProjectile: 10
-        angle: 180
-        randomAngle: 1
-        attackSpeed: 3
+        nProjectile: 3
+        range: 10
+        angle: 90
+        randomAngle: 0
+        attackSpeed: 1
         previewTime: 1.5
         previewPrefab: {fileID: -2951393003011872103, guid: fdb1d8d10c9844840af745cc4b3175c8, type: 3}
-    - rid: 2829484606340464669
+    - rid: 2829484723882950659
       type: {class: MonsterActionConditionNearPlayer, ns: , asm: Assembly-CSharp}
       data:
-        distance: {x: 0, y: 5}
+        distance: {x: 0, y: 10}
