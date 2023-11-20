@@ -8,30 +8,86 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
 
-    [SerializeField] private HeaderUI Hearder;
-    [SerializeField] private GameObject knob;
-    [SerializeField] private Image ImagePlace;
-
-
-
     private enum State
     {
-        NO_UI,
-        UI_GAME,
-        UI_PARAMETTRE,
-        UI_BUFF,
-        UI_PUB_ALL_PAGE
+        NO_UI = 0,
+        UI_GAME = 1 ,
+        UI_PARAMETTRE = 2,
+        UI_BUFF = 3,
+        UI_PUB_ALL_PAGE = 4,
     }
 
-    private State actualState;
-    private State lastState;
+
+    [SerializeField] private HeaderUI Hearder;
+    [SerializeField] private GameObject Knob;
+    [SerializeField] private Image ImagePlace;
+
+    [Header("Ui Layer ")]
+    [SerializeField] private GameObject ParameterUI;
+    [SerializeField] private GameObject BuffUI;
+
+    private State actualState = State.UI_GAME;
+    private State lastState = State.UI_GAME;
 
 
 
     private void Update()
     {
+        if(actualState != lastState)
+        {
+            if(actualState == State.NO_UI)
+            {
+                DiscardActualState();
+                lastState = State.UI_GAME;
+                DiscardActualState();
+                ActivateActualState();
+                lastState = actualState;
+            }
+            else if (actualState == State.UI_GAME)
+            {
+                DiscardActualState();
+                ActivateActualState();
+                lastState = actualState;
+            }
+            else if (actualState == State.UI_PARAMETTRE)
+            {
+                DiscardActualState();
+                ActivateActualState();
+                lastState = actualState;
+            }
+            else if (actualState == State.UI_BUFF)
+            {
+                DiscardActualState();
+                ActivateActualState();
+                lastState = actualState;
+            }
+
+        }
     }
 
+
+
+    //Discard last UI et Create new UI
+    private void DiscardActualState()
+    {
+        switch(lastState)
+        {
+            case State.UI_GAME: Hearder.gameObject.SetActive(false); break;
+            case State.UI_PARAMETTRE : ParameterUI.SetActive(false); break;
+            case State.UI_BUFF: BuffUI.SetActive(false); break;
+            default: break;
+        }
+    }
+
+    private void ActivateActualState()
+    {
+        switch (actualState)
+        {
+            case State.UI_GAME: Hearder.gameObject.SetActive(true); break;
+            case State.UI_PARAMETTRE: ParameterUI.SetActive(true); break;
+            case State.UI_BUFF: BuffUI.SetActive(true); break;
+        }
+    }
 
 
 
