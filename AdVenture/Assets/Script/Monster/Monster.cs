@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class Monster : MonoBehaviour
+public class Monster : MonoBehaviour, IDamageable
 {
     public MonsterData data;
 
@@ -9,7 +9,9 @@ public class Monster : MonoBehaviour
 
     private List<MonsterActionState> allAction;
     public MonsterActionState currentState;
-    public bool lockInState;
+
+    public int maxHealth;
+    public int health;
 
     private void Awake()
     {
@@ -21,14 +23,18 @@ public class Monster : MonoBehaviour
     {
         data = _data;
         allAction = data.GetActions();
+        maxHealth = _data.maxHealth;
+        health = maxHealth;
+    }
+
+    public void SetTarget(Transform _target)
+    {
+        target = _target;
     }
 
     void FixedUpdate()
     {
         currentState?.UpdateState(this);
-
-        if (lockInState)
-            return;
 
         MonsterActionState action = SelectAction();
 
@@ -36,8 +42,6 @@ public class Monster : MonoBehaviour
             return;
 
         ChangeState(action);
-
-        //Debug.Log("DoAction : " + action.GetType().Name + " || " + action.Evaluate(this));
     }
 
     private MonsterActionState SelectAction()
@@ -65,8 +69,18 @@ public class Monster : MonoBehaviour
         currentState?.EnterState(this);
     }
 
-    public void SetTarget(Transform _target)
+    public void TakeDamage(int _value)
     {
-        target = _target;
+        health -= _value;
+        if(IsDead())
+        {
+            gameObject.SetActive(false);
+            EventWatcher.DoOnMonsterDie(this);
+        }
+    }
+
+    public bool IsDead()
+    {
+        return health <= 0;
     }
 }
