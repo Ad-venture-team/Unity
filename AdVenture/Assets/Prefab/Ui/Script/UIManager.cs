@@ -134,20 +134,20 @@ public class UIManager : MonoBehaviour
         UIGame.timeText.ResetTimer();
     }
 
-    public void CreatNewMonsterList(List<Sprite> monsterList,Image image)
-    {
-        UIGame.ennemiBar.CreatNewMonsterList(monsterList, image);
-    }
+    //public void CreatNewMonsterList(Image image)
+    //{
+    //    UIGame.ennemiBar.CreatNewMonsterList(monsterList, image);
+    //}
 
-    public void ResetMonsterList()
-    {
-        UIGame.ennemiBar.ResetMonsterList();
-    }
+    //public void ResetMonsterList()
+    //{
+    //    UIGame.ennemiBar.ResetMonsterList();
+    //}
 
-    public void KilledMonster(int monsterId)
-    {
-        UIGame.ennemiBar.KilledMonster(monsterId);
-    }
+    //public void KilledMonster(int monsterId)
+    //{
+    //    UIGame.ennemiBar.KilledMonster(monsterId);
+    //}
 
 
     //HeaderUI Script

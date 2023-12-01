@@ -16,7 +16,6 @@ public class UIGame : MonoBehaviour
 
     //Outside Script In Game Mechanics
     [SerializeField] public TimeCounter timeText;
-    [SerializeField] public EnnemiBar ennemiBar;
 
     private int maxWave = 0;
 
