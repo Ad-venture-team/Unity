@@ -4,11 +4,28 @@ using UnityEngine;
 using TMPro;
 using System;
 using UnityEngine.UI;
+using UnityEngine.InputSystem.OnScreen;
 
 public class UIManager : MonoBehaviour
 {
 
-    private enum State
+    #region Singleton
+    private static UIManager _instance;
+    public static UIManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<UIManager>();
+            }
+            return _instance;
+        }
+    }
+    #endregion
+
+
+    public enum State
     {
         NO_UI = 0,
         UI_GAME = 1 ,
@@ -18,15 +35,15 @@ public class UIManager : MonoBehaviour
     }
 
 
-    [SerializeField] private HeaderUI Hearder;
-    [SerializeField] private GameObject Knob;
+    [SerializeField] private UIGame UIGame;
+    [SerializeField] private OnScreenStick Knob;
     [SerializeField] private Image ImagePlace;
 
     [Header("Ui Layer ")]
     [SerializeField] private GameObject ParameterUI;
     [SerializeField] private GameObject BuffUI;
 
-    private State actualState = State.UI_GAME;
+    [HideInInspector] public State actualState = State.UI_GAME;
     private State lastState = State.UI_GAME;
 
 
@@ -61,9 +78,11 @@ public class UIManager : MonoBehaviour
                 ActivateActualState();
                 lastState = actualState;
             }
-
         }
     }
+
+
+
 
 
 
@@ -72,7 +91,7 @@ public class UIManager : MonoBehaviour
     {
         switch(lastState)
         {
-            case State.UI_GAME: Hearder.gameObject.SetActive(false); break;
+            case State.UI_GAME: UIGame.gameObject.SetActive(false); break;
             case State.UI_PARAMETTRE : ParameterUI.SetActive(false); break;
             case State.UI_BUFF: BuffUI.SetActive(false); break;
             default: break;
@@ -83,63 +102,73 @@ public class UIManager : MonoBehaviour
     {
         switch (actualState)
         {
-            case State.UI_GAME: Hearder.gameObject.SetActive(true); break;
+            case State.UI_GAME: UIGame.gameObject.SetActive(true); break;
             case State.UI_PARAMETTRE: ParameterUI.SetActive(true); break;
             case State.UI_BUFF: BuffUI.SetActive(true); break;
         }
     }
 
 
+    //Button Controlle
+    public void UnClickableGameButton()
+    {
+        Knob.gameObject.SetActive(false);
+        UIGame.UnClickableGameButton();
+    }
 
-
+    public void ClickableGameButton()
+    {
+        Knob.gameObject.SetActive(true);
+        UIGame.ClickableGameButton();
+    }
 
 
     //Outside Script
     public void StartTimer()
     {
-        Hearder.timeText.StartTimer();
+        UIGame.timeText.StartTimer();
     }
 
     public void ResetTimer()
     {
-        Hearder.timeText.ResetTimer();
+        UIGame.timeText.ResetTimer();
     }
 
     public void CreatNewMonsterList(List<Sprite> monsterList,Image image)
     {
-        Hearder.ennemiBar.CreatNewMonsterList(monsterList, image);
+        UIGame.ennemiBar.CreatNewMonsterList(monsterList, image);
     }
 
     public void ResetMonsterList()
     {
-        Hearder.ennemiBar.ResetMonsterList();
+        UIGame.ennemiBar.ResetMonsterList();
     }
 
     public void KilledMonster(int monsterId)
     {
-        Hearder.ennemiBar.KilledMonster(monsterId);
+        UIGame.ennemiBar.KilledMonster(monsterId);
     }
 
 
     //HeaderUI Script
     public void SetNumberRoom(int number)
     {
-        Hearder.SetNumberRoom(number);
+        UIGame.SetNumberRoom(number);
     }
 
     public void FinalRoom()
     {
-        Hearder.FinalRoom();
+        UIGame.FinalRoom();
     }
 
     public void SetMaxWaveNumber(int number)
     {
-        Hearder.SetMaxWaveNumber(number);
+        UIGame.SetMaxWaveNumber(number);
     }
 
     public void SetActualWaveNumber(int number)
     {
-        Hearder.SetActualWaveNumber(number);
+        UIGame.SetActualWaveNumber(number);
     }
 
 
