@@ -57,7 +57,7 @@ public class MonsterActionZoneAttack : MonsterActionState
         if (currentPreview == null)
             currentPreview = GameObject.Instantiate(previewPrefab, _monster.transform);
 
-        currentPreview.DrawCirclePreview((_monster.target.position - _monster.transform.position), direction, 360, radius);
+        currentPreview.DrawCirclePreview(_monster.target.position, direction, 360, radius);
         currentPreview.SetValue(previewTime, () => LaunchAttack(_monster, radius));
     }
 
