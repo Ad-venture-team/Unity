@@ -907,7 +907,6 @@ MonoBehaviour:
   roomNumberText: {fileID: 8546468376481259420}
   waveNumberText: {fileID: 2769478466606323149}
   timeText: {fileID: 277569896068976898}
-  ennemiBar: {fileID: 5021367244431294042}
 --- !u!1 &6810739744718450942
 GameObject:
   m_ObjectHideFlags: 0
