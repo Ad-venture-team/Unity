@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using DG.Tweening;
 
 [Serializable]
 public class MonsterActionAttackProjectile : MonsterActionState
@@ -30,6 +31,7 @@ public class MonsterActionAttackProjectile : MonsterActionState
     {
         previews.Clear();
         isCasting = false;
+        delay = 0;
     }
     public override void UpdateState(Monster _monster)
     {
@@ -43,6 +45,8 @@ public class MonsterActionAttackProjectile : MonsterActionState
         }
         direction = (_monster.target.position - _monster.transform.position).normalized;
 
+        _monster.visual.flipX = direction.x < 0;
+
         CalculateAngles();
 
         DrawPreview(_monster);
@@ -50,11 +54,10 @@ public class MonsterActionAttackProjectile : MonsterActionState
 
     public override void ExitState(Monster _monster)
     {
-        delay = attackSpeed;
         foreach (MonsterLineAttackPreview preview in previews)
             GameObject.Destroy(preview.gameObject);
         previews.Clear();
-        isCasting = false;
+        UnCastAttack(_monster);
     }
 
     private void CalculateAngles()
@@ -79,13 +82,15 @@ public class MonsterActionAttackProjectile : MonsterActionState
         newProjectile.InitVector(targetDir, _monster.transform.position);
         newProjectile.Init(projectileSpeed, range);
         newProjectile.SetIcon(icon);
-        delay = attackSpeed;
-        isCasting = false;
+
+        _monster.transform.DOPunchPosition(direction, 0.1f);
+
+        UnCastAttack(_monster);
     }
 
     private void DrawPreview(Monster _monster)
     {
-        isCasting = true;
+        CastAttack(_monster);
         for (int i = 0; i < angles.Count; i++)
         {
             float currentAngle = angles[i];
@@ -98,6 +103,21 @@ public class MonsterActionAttackProjectile : MonsterActionState
             currentPreview.DrawLinePreview(_monster.transform.position, targetDir, range, 1);
             currentPreview.SetValue(previewTime, () => LaunchAttack(_monster, currentAngle));
         }
+    }
+
+    private void CastAttack(Monster _monster)
+    {
+        isCasting = true;
+        _monster.lockInState = true;
+        _monster.animator.speed = 2;
+    }
+
+    private void UnCastAttack(Monster _monster)
+    {
+        delay = attackSpeed;
+        isCasting = false;
+        _monster.lockInState = false;
+        _monster.animator.speed = 1;
     }
 
     public override MonsterActionState GetCopy()

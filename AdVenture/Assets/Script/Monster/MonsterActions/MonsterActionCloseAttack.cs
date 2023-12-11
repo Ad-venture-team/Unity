@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class MonsterActionCloseAttack : MonsterActionState
 {
@@ -19,6 +20,7 @@ public class MonsterActionCloseAttack : MonsterActionState
     public override void EnterState(Monster _monster)
     {
         isCasting = false;
+        delay = 0;
     }
     public override void UpdateState(Monster _monster)
     {
@@ -31,17 +33,16 @@ public class MonsterActionCloseAttack : MonsterActionState
             return;
         }
         direction = (_monster.target.position - _monster.transform.position).normalized;
-
+        _monster.visual.flipX = direction.x < 0;
         DrawPreview(_monster);
     }
 
     public override void ExitState(Monster _monster)
     {
-        delay = attackSpeed;
         if(currentPreview != null)
             GameObject.Destroy(currentPreview.gameObject);
         currentPreview = null;
-        isCasting = false;
+        UnCastAttack(_monster);
     }
 
     private void LaunchAttack(Monster _monster, float _angle, float _radius)
@@ -50,17 +51,34 @@ public class MonsterActionCloseAttack : MonsterActionState
 
         Debug.Log("Attack");
 
-        isCasting = false;
+        _monster.transform.DOPunchPosition(direction, 0.1f);
+
+        UnCastAttack(_monster);
     }
 
     private void DrawPreview(Monster _monster)
     {
-        isCasting = true;
+        CastAttack(_monster);
         if (currentPreview == null)
             currentPreview = GameObject.Instantiate(previewPrefab, _monster.transform);
 
             currentPreview.DrawCirclePreview(_monster.transform.position, direction, angle, radius);
             currentPreview.SetValue(previewTime, () => LaunchAttack(_monster, angle, radius));
+    }
+
+    private void CastAttack(Monster _monster)
+    {
+        isCasting = true;
+        _monster.lockInState = true;
+        _monster.animator.speed = 2;
+    }
+
+    private void UnCastAttack(Monster _monster)
+    {
+        delay = attackSpeed;
+        isCasting = false;
+        _monster.lockInState = false;
+        _monster.animator.speed = 1;
     }
 
     public override MonsterActionState GetCopy()

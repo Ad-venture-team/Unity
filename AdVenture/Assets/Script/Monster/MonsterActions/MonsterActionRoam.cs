@@ -17,9 +17,12 @@ public class MonsterActionRoam : MonsterActionState
     public override void EnterState(Monster _monster)
     {
         NewRoamPosition(_monster);
+        
     }
     public override void UpdateState(Monster _monster)
     {
+        _monster.animator.SetBool("isMoving", delay < 0);
+
         if(delay > 0)
         {
             delay -= Time.deltaTime;
@@ -29,12 +32,17 @@ public class MonsterActionRoam : MonsterActionState
         if (targetPos == null)
             NewRoamPosition(_monster);
 
+        _monster.transform.position += (targetPos - _monster.transform.position).normalized * speed * Time.deltaTime;
+        _monster.visual.flipX = (targetPos - _monster.transform.position).normalized.x < 0;
+
         float dist = Vector2.Distance(_monster.transform.position, targetPos);
         if (dist <= threshold)
             NewRoamPosition(_monster);
+    }
 
-        _monster.transform.position += (targetPos - _monster.transform.position).normalized * speed * Time.deltaTime;
-
+    public override void ExitState(Monster _monster)
+    {
+        _monster.animator.SetBool("isMoving", false);
     }
 
     public void NewRoamPosition(Monster _monster)
