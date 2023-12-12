@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class DataBase : SingletonBehaviour<DataBase>
 {
+    public Dictionary<int, MonsterData> monsterData = new Dictionary<int, MonsterData>();
     void Awake()
     {
         LoadAll();
@@ -10,6 +11,7 @@ public class DataBase : SingletonBehaviour<DataBase>
 
     private void LoadAll()
     {
+        LoadMonsters();
     }
 
     private Dictionary<int, T> Load<T>(string path) where T : Object, IData
@@ -22,5 +24,10 @@ public class DataBase : SingletonBehaviour<DataBase>
             result.Add(pair.GetId(), pair);
 
         return result;
+    }
+
+    private void LoadMonsters()
+    {
+        monsterData = Load<MonsterData>("Data/Monster");
     }
 }
