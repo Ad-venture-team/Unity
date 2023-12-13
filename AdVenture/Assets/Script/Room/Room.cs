@@ -13,6 +13,8 @@ public class Room
     public Room(int _width, int _height)
     {
         map = new int[_width, _height];
+        width = _width;
+        height = _height;
         monsters = new List<RoomElement>();
     }
 }

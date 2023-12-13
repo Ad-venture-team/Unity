@@ -4,6 +4,8 @@ using UnityEngine;
 public class DataBase : SingletonBehaviour<DataBase>
 {
     public Dictionary<int, MonsterData> monsterData = new Dictionary<int, MonsterData>();
+    public Dictionary<int, TileData> tileData = new Dictionary<int, TileData>();
+
     void Awake()
     {
         LoadAll();
@@ -12,6 +14,7 @@ public class DataBase : SingletonBehaviour<DataBase>
     private void LoadAll()
     {
         LoadMonsters();
+        LoadTile();
     }
 
     private Dictionary<int, T> Load<T>(string path) where T : Object, IData
@@ -29,5 +32,10 @@ public class DataBase : SingletonBehaviour<DataBase>
     private void LoadMonsters()
     {
         monsterData = Load<MonsterData>("Data/Monster");
+    }
+
+    private void LoadTile()
+    {
+        tileData = Load<TileData>("Data/Tile");
     }
 }
