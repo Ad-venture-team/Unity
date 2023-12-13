@@ -33,7 +33,7 @@ public class MonsterCircleAttackPreview : MonoBehaviour
         mesh.name = "NewMesh";
         meshFilter.mesh = mesh;
         transform.position = _origine;
-        meshRenderer.sharedMaterial.SetFloat("_Range", _radius);
+        meshRenderer.material.SetFloat("_Range", _radius);
         Vector2 relativeOrigine = _origine - (Vector2)transform.position;
         Vector2 relativeDir = _dir - (Vector2)transform.position;
         points = new List<Vector2>();
@@ -113,6 +113,6 @@ public class MonsterCircleAttackPreview : MonoBehaviour
     }
     private void ChangeShaderValue(float t)
     {
-        meshRenderer.sharedMaterial.SetFloat("_Value", t);
+        meshRenderer.material.SetFloat("_Value", t);
     }
 }
