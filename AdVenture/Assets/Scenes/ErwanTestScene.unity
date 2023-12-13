@@ -320,6 +320,7 @@ GameObject:
   - component: {fileID: 1481110773}
   - component: {fileID: 1481110772}
   - component: {fileID: 1481110771}
+  - component: {fileID: 1481110775}
   m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
@@ -405,6 +406,27 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &1481110775
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1481110770}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f375af34136e0e2489d03f019f0df7fe, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1606191352
 GameObject:
   m_ObjectHideFlags: 0
@@ -651,11 +673,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4597990639277657779, guid: 62cccd157a86ec644b7a404dcabef658, type: 3}
       propertyPath: m_Color.b
-      value: 0.0039215684
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4597990639277657779, guid: 62cccd157a86ec644b7a404dcabef658, type: 3}
       propertyPath: m_Color.g
-      value: 0.9686989
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4597990639277657779, guid: 62cccd157a86ec644b7a404dcabef658, type: 3}
       propertyPath: m_Color.r

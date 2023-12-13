@@ -13,6 +13,11 @@ public class Monster : MonoBehaviour, IDamageable
     public int maxHealth;
     public int health;
 
+    public Animator animator;
+    public SpriteRenderer visual;
+
+    [HideInInspector] public bool lockInState;
+
     private void Awake()
     {
         if (data != null)
@@ -25,6 +30,7 @@ public class Monster : MonoBehaviour, IDamageable
         allAction = data.GetActions();
         maxHealth = _data.maxHealth;
         health = maxHealth;
+        animator.runtimeAnimatorController = _data.animationController;
     }
 
     public void SetTarget(Transform _target)
@@ -38,7 +44,7 @@ public class Monster : MonoBehaviour, IDamageable
 
         MonsterActionState action = SelectAction();
 
-        if (action == null || action == currentState)
+        if (action == null || action == currentState || lockInState)
             return;
 
         ChangeState(action);
