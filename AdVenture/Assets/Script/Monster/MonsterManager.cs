@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,11 +14,24 @@ public class MonsterManager : MonoBehaviour
     private void OnEnable()
     {
         EventWatcher.getMonsterList += RequestMonsters;
+        EventWatcher.onNewRoom += LoadRoom;
     }
 
     private void OnDisable()
     {
         EventWatcher.getMonsterList -= RequestMonsters;
+        EventWatcher.onNewRoom -= LoadRoom;
+    }
+
+    private void LoadRoom(Room _room)
+    {
+        foreach (Transform T in monsterContent)
+            Destroy(T.gameObject);
+
+        monsters.Clear();
+
+        foreach(RoomElement monsterElem in _room.monsters)
+            AddMonster(DataBase.Instance.monsterData[monsterElem.id], new Vector2(monsterElem.posX, monsterElem.posY));
     }
 
     public void AddMonster(MonsterData _data, Vector2 _position)
