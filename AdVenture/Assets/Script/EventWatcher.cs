@@ -4,6 +4,9 @@ using UnityEngine;
 
 public static class EventWatcher
 {
+    public static event Action<Room> onNewRoom;
+    public static void DoOnNewRoom(Room _room) => onNewRoom?.Invoke(_room);
+
     #region MONSTER
 
     public static event Action<Monster> onAddMonster;

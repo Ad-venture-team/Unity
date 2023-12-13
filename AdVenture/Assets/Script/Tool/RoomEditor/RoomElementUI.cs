@@ -9,7 +9,7 @@ public class RoomElementUI : MonoBehaviour, IPointerClickHandler
     public Image icon;
     public TextMeshProUGUI header;
     public TextMeshProUGUI quantityText;
-    private int quantity;
+    [HideInInspector] public int quantity;
 
     public Action onClick;
     
