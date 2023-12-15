@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,7 +17,9 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private PlayerAction playerActionControl;
     [SerializeField] private float speed;
-    private Vector2 moovInput = new Vector2(0,0);
+    [SerializeField] private WeaponData weapon;
+    private float attackDelay;
+    private Vector2 moveInput = new Vector2(0,0);
 
     private void Awake()
     {
@@ -26,7 +29,9 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        Moov(moovInput);
+        if (attackDelay > 0)
+            attackDelay -= Time.deltaTime;
+        Move(moveInput);
     }
 
     private void OnEnable()
@@ -42,14 +47,20 @@ public class PlayerController : MonoBehaviour
 
     private void InitEvent()
     {
-        playerActionControl.Player.Walk.performed += ctx => moovInput = ctx.ReadValue<Vector2>();
-        playerActionControl.Player.Walk.canceled += ctx => moovInput = Vector2.zero;
+        playerActionControl.Player.Walk.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
+        playerActionControl.Player.Walk.canceled += ctx => moveInput = Vector2.zero;
     }
 
-    private void Moov(Vector3 parametre)
+    private void Move(Vector3 parametre)
     {
         float plusX = 0;
         float plusY = 0;
+
+        if(parametre == Vector3.zero)
+        {
+            Attack();
+            return;
+        }
 
         switch(parametre.x)
         {
@@ -71,5 +82,27 @@ public class PlayerController : MonoBehaviour
         }
 
         transform.position += parametre.normalized * speed * Time.deltaTime;
+    }
+
+    private void Attack()
+    {
+        if (attackDelay > 0)
+            return;
+
+        Monster target = GetClosestMonster();
+        if (target == null || ((target.transform.position - transform.position).sqrMagnitude > weapon.range* weapon.range))
+        return;
+
+        weapon.SetData(transform, target.transform);
+        attackDelay = weapon.attackDelay;
+    }
+
+    private Monster GetClosestMonster()
+    {
+        List<Monster> monsters = new List<Monster>();
+        EventWatcher.DoGetMonsterList(ref monsters);
+        if (monsters.Count == 0)
+            return null;
+        return monsters.OrderBy(t => (t.transform.position-transform.position).sqrMagnitude).First();
     }
 }

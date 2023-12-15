@@ -3,6 +3,8 @@ using UnityEngine;
 
 
 public class BulletScript : ProjectileBehaviour {
+
+    [SerializeField] private float threshold = .005f;
     public override void SetData(Transform player, Transform monstre, WeaponData d) {
         target=monstre.position;
         weaponData = d;
@@ -12,8 +14,9 @@ public class BulletScript : ProjectileBehaviour {
         if (target==null)
             return;
 
-        transform.position+=weaponData.speed*Time.deltaTime*new Vector3((target-new Vector2(transform.position.x, transform.position.y)).normalized.x, (target-new Vector2(transform.position.x, transform.position.y)).normalized.y, 0);
-    }
+        if (Vector2.Distance(transform.position, target) < threshold)
+            Destroy(gameObject);
 
-    //return mobs.OrderBy(t => (t.transform.position-transform.position).sqrMagnitude).FirstOrDefault().transform.position;
+        transform.position += weaponData.speed * Time.deltaTime * ((Vector3)target - transform.position).normalized;
+    }
 }

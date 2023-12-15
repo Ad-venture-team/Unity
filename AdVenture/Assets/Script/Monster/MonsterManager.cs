@@ -1,11 +1,8 @@
-using System.Linq;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class MonsterManager : MonoBehaviour
 {
-    public Transform monsterContent;
     public Transform playerTransform;
 
     public Monster monsterPrefab;
@@ -25,7 +22,7 @@ public class MonsterManager : MonoBehaviour
 
     private void LoadRoom(Room _room)
     {
-        foreach (Transform T in monsterContent)
+        foreach (Transform T in transform)
             Destroy(T.gameObject);
 
         monsters.Clear();
@@ -36,7 +33,7 @@ public class MonsterManager : MonoBehaviour
 
     public void AddMonster(MonsterData _data, Vector2 _position)
     {
-        Monster newMonster = Instantiate(monsterPrefab, _position, Quaternion.identity, monsterContent);
+        Monster newMonster = Instantiate(monsterPrefab, _position, Quaternion.identity, transform);
         newMonster.SetData(_data);
         newMonster.SetTarget(playerTransform);
         monsters.Add(newMonster);
