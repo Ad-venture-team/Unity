@@ -5,34 +5,78 @@ using UnityEngine.UI;
 
 public class EnnemiBar : MonoBehaviour
 {
+    private List<Monster> monsters = new List<Monster>();
+    private Image imagePrefab;
+
     private List<Image> EnnemiSprite = new List<Image>();
-    private List<bool> EnnemiLifeStatue = new List<bool>();
 
-    public void CreatNewMonsterList(List<Sprite> monsterList, Image image)
+    private void OnEnable()
     {
-        foreach (Sprite monster in monsterList)
-        {
-            image.sprite = monster;
-            EnnemiSprite.Add(Instantiate(image, gameObject.transform));
-            EnnemiLifeStatue.Add(true);
-        }
+        EventWatcher.onAddMonster += OnNewMonster;
+        EventWatcher.onRemoveMonster += OnRemovedMonster;
+        EventWatcher.onMonsterDie += OnMonsterDeath;
     }
 
-    public void ResetMonsterList()
+    private void OnDisable()
     {
-        foreach (Image mouseTooClean in EnnemiSprite)
-        {
-            Destroy(mouseTooClean.gameObject);
-        }
-        EnnemiSprite = null;
-        EnnemiSprite = new List<Image>();
-        EnnemiLifeStatue = null;
-        EnnemiLifeStatue = new List<bool>();
+        EventWatcher.onAddMonster -= OnNewMonster;
+        EventWatcher.onRemoveMonster -= OnRemovedMonster;
+        EventWatcher.onMonsterDie -= OnMonsterDeath;
     }
 
-    public void KilledMonster(int monsterId)
+
+    private void OnNewMonster(Monster _monster)
     {
-        EnnemiSprite[monsterId].color = new Color(0, 0, 50);
-        EnnemiLifeStatue[monsterId] = false;
+        monsters.Add(_monster);
+        Refresh();
+    }
+    private void OnRemovedMonster(Monster _monster)
+    {
+        monsters.Remove(_monster);
+        Refresh();
+    }
+
+    private void OnMonsterDeath(Monster _monster)
+    {
+        Refresh();
+    }
+
+    private void Refresh()
+    {
+        foreach (Transform T in transform)
+            Destroy(T.gameObject);
+
+        EnnemiSprite.Clear();
+        foreach (Monster monster in monsters)
+        {
+            Image image = Instantiate(imagePrefab, transform);
+            image.sprite = monster.data.icon;
+            RefreshMonsterIcon(image, monster);
+            EnnemiSprite.Add(image);
+        }
+    }
+    //public void CreatNewMonsterList(Image image)
+    //{
+    //    EventWatcher.DoGetMonsterList(ref monsters);
+
+
+    //}
+
+    //public void ResetMonsterList()
+    //{
+    //    foreach (Image mouseTooClean in EnnemiSprite)
+    //    {
+    //        Destroy(mouseTooClean.gameObject);
+    //    }
+    //    EnnemiSprite = null;
+    //    EnnemiSprite = new List<Image>();
+    //    EnnemiLifeStatue = null;
+    //    EnnemiLifeStatue = new List<bool>();
+    //}
+
+    public void RefreshMonsterIcon(Image _icon, Monster _monster)
+    {
+        if(_monster.IsDead())
+            _icon.color = new Color(0, 0, 50);
     }
 }
