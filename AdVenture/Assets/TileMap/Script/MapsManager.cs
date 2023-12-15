@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Cinemachine;
 
 public class MapsManager : MonoBehaviour
 {
 
     [SerializeField] private Tilemap ground;
     [SerializeField] private Tilemap wall;
+    [SerializeField] private PolygonCollider2D camColider;
+    [SerializeField] private CinemachineConfiner2D cinemachine;
 
     private void Awake()
     {
@@ -40,6 +43,9 @@ public class MapsManager : MonoBehaviour
             wall.SetTile(new Vector3Int(-1, y, 0), DataBase.Instance.tileData[1].tileBase);
         }
 
+        camColider.SetPath(0, new[] { new Vector2(-1, -1), new Vector2(createRoom.width +1, -1), new Vector2(createRoom.width +1, createRoom.height +5), new Vector2(-1, createRoom.height +5) });
+
+        cinemachine.InvalidateCache();
 
     }
 }
