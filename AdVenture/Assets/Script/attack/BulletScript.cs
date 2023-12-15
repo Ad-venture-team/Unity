@@ -19,4 +19,13 @@ public class BulletScript : ProjectileBehaviour {
 
         transform.position += weaponData.speed * Time.deltaTime * ((Vector3)target - transform.position).normalized;
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Monster monster;
+        if (collision.TryGetComponent(out monster))
+            monster.TakeDamage(weaponData.damage);
+
+        Destroy(gameObject);
+    }
 }

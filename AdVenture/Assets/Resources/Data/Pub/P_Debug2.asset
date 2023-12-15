@@ -21,6 +21,7 @@ MonoBehaviour:
   showDelay: 0
   delay: 3
   closeOnEnd: 1
+  isEndRoomPub: 1
   references:
     version: 2
     RefIds:

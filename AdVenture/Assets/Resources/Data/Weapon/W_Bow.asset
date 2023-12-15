@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: W_Bow
   m_EditorClassIdentifier: 
   id: 0
-  damage: 50
+  damage: 34
   range: 10
   speed: 15
   attackDelay: 0.5

@@ -101,6 +101,7 @@ public class PlayerController : MonoBehaviour
     {
         List<Monster> monsters = new List<Monster>();
         EventWatcher.DoGetMonsterList(ref monsters);
+        monsters.RemoveAll(x => x.IsDead());
         if (monsters.Count == 0)
             return null;
         return monsters.OrderBy(t => (t.transform.position-transform.position).sqrMagnitude).First();

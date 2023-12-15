@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1
   name: Undead
-  maxHealth: 0
+  maxHealth: 100
   icon: {fileID: 72871872, guid: 1824cbaea8472a548bd0921254dc12f5, type: 3}
   animationController: {fileID: 9100000, guid: ef07c971985dde44785f628ad09a0db2, type: 2}
   actions:

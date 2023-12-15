@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 0
   name: Goblin
-  maxHealth: 0
+  maxHealth: 100
   icon: {fileID: 605845125, guid: 1824cbaea8472a548bd0921254dc12f5, type: 3}
   animationController: {fileID: 9100000, guid: 7ff6ed62a1576b243826d270cad6f93c, type: 2}
   actions:

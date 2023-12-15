@@ -102,4 +102,11 @@ public class Boomerang : ProjectileBehaviour {
             Mathf.Sin(angleRad)*(point.x-pivot.x)+Mathf.Cos(angleRad)*(point.y-pivot.y)+pivot.y
         );
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Monster monster;
+        if (collision.TryGetComponent(out monster))
+            monster.TakeDamage(weaponData.damage);
+    }
 }

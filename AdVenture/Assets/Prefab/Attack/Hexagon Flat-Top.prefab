@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 3639887427910291810}
   - component: {fileID: 6332975563819938342}
   - component: {fileID: 7876761932926658100}
+  - component: {fileID: 1625292691378317898}
   m_Layer: 0
   m_Name: Hexagon Flat-Top
   m_TagString: Untagged
@@ -183,9 +184,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9643bf862993a2142b1980bd0726a430, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
-  rotationSpeed: 5
-  player: {fileID: 0}
+  weaponData: {fileID: 0}
+  target: {x: 0, y: 0}
+--- !u!58 &1625292691378317898
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494373047853945058}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5
 --- !u!1 &1930657541184920943
 GameObject:
   m_ObjectHideFlags: 0

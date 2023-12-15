@@ -18,6 +18,8 @@ public class PubData : ScriptableObject,IData
     [ShowIf("hasDelay"), Indent] public float delay;
     [ShowIf("hasDelay"), Indent] public bool closeOnEnd;
 
+    public bool isEndRoomPub;
+
     public int GetId()
     {
         return id;

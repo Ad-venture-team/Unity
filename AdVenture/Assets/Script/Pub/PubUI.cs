@@ -11,6 +11,8 @@ public class PubUI : UIViewManager
     private PubData data;
     private float delay;
 
+    public Action onClose;
+
     public void FixedUpdate()
     {
         if (data != null && data.hasDelay)
@@ -41,7 +43,7 @@ public class PubUI : UIViewManager
         Show();
     }
 
-    public override void Hide(Action onHideEnd = null)
+    public override void Hide()
     {
         base.Hide(OnHide);
     }
@@ -49,6 +51,7 @@ public class PubUI : UIViewManager
     public void OnHide()
     {
         //RemoveDuPubManager
+        onClose?.Invoke();
         Destroy(gameObject);
     }
 }
