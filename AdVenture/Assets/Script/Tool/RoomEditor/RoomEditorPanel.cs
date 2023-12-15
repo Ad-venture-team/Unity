@@ -36,12 +36,30 @@ public class RoomEditorPanel : UIViewManager
             RoomElementItem newItem = new RoomElementItem(monsterData[i].id, RoomElementType.MONSTER);
             current.SetData(newItem);
             current.onClick = () => RoomEditorCreator.DoOnNewRoomElem(newItem);
+            current.gameObject.SetActive(true);
+        }
+    }
+
+    public void LoadPubs()
+    {
+        ClearContainer();
+        List<PubData> pubData = DataBase.Instance.pubData.Values.ToList();
+        for (int i = 0; i < pubData.Count; i++)
+        {
+            if (elems.Count <= i)
+                elems.Add(Instantiate(elementPrefab, container));
+
+            RoomElementUI current = elems[i];
+            RoomElementItem newItem = new RoomElementItem(pubData[i].id, RoomElementType.PUB);
+            current.SetData(newItem);
+            current.onClick = () => EventWatcher.DoOnNewPub(newItem.id, Vector2.zero);
+            current.gameObject.SetActive(true);
         }
     }
 
     public void FixedUpdate()
     {
-        if (Keyboard.current.ctrlKey.isPressed && Keyboard.current.shiftKey.isPressed && Keyboard.current.rKey.isPressed)
-            Show();
+        if (Keyboard.current.ctrlKey.isPressed && Keyboard.current.shiftKey.isPressed && Keyboard.current.rKey.wasPressedThisFrame)
+                Show();
     }
 }

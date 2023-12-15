@@ -7,6 +7,9 @@ public static class EventWatcher
     public static event Action<Room> onNewRoom;
     public static void DoOnNewRoom(Room _room) => onNewRoom?.Invoke(_room);
 
+    public static event Action<int, Vector2> onNewPub;
+    public static void DoOnNewPub(int _id, Vector2 _position) => onNewPub?.Invoke(_id,_position);
+
     #region MONSTER
 
     public static event Action<Monster> onAddMonster;

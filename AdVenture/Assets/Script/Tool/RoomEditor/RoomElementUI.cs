@@ -25,10 +25,15 @@ public class RoomElementUI : MonoBehaviour, IPointerClickHandler
                 icon.sprite = monsterData.icon;
                 header.text = monsterData.name;
                 break;
+            case RoomElementType.PUB:
+                PubData pubData = DataBase.Instance.pubData[_item.id];
+                icon.sprite = null;
+                header.text = pubData.name;
+                break;
             default:
                 break;
         }
-        ChangeQuantity(1);
+        quantityText.text = "";
     }
 
     public void OnPointerClick(PointerEventData eventData)

@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
@@ -63,7 +63,7 @@ public class UIView : MonoBehaviour
 
     }
 
-    public void Show()
+    public void Show(Action onShowEnd = null)
     {
         if (isShow)
             return;
@@ -92,28 +92,28 @@ public class UIView : MonoBehaviour
         }
 
         if (slideType == UITransition.NONE)
-            isTweening = false;
+            EndTweening(onShowEnd);
         else
         {
             switch (slideType)
             {
                 case UITransition.TOP:
-                    rect.DOAnchorPosY(Mathf.Abs(canvasRect.sizeDelta.y - originalPos.y), slideTime).OnComplete(() => { EndTweening(); });
+                    rect.DOAnchorPosY(Mathf.Abs(canvasRect.sizeDelta.y - originalPos.y), slideTime).OnComplete(() => { EndTweening(onShowEnd); });
                     break;
                 case UITransition.RIGHT:
-                    rect.DOAnchorPosX(Mathf.Abs(canvasRect.sizeDelta.x - originalPos.x), slideTime).OnComplete(() => { EndTweening(); });
+                    rect.DOAnchorPosX(Mathf.Abs(canvasRect.sizeDelta.x - originalPos.x), slideTime).OnComplete(() => { EndTweening(onShowEnd); });
                     break;
                 case UITransition.BOTTOM:
-                    rect.DOAnchorPosY(Mathf.Abs(canvasRect.sizeDelta.y + originalPos.y), slideTime).OnComplete(() => { EndTweening(); });
+                    rect.DOAnchorPosY(Mathf.Abs(canvasRect.sizeDelta.y + originalPos.y), slideTime).OnComplete(() => { EndTweening(onShowEnd); });
                     break;
                 case UITransition.LEFT:
-                    rect.DOAnchorPosX(Mathf.Abs(canvasRect.sizeDelta.x + originalPos.x), slideTime).OnComplete(() => { EndTweening(); });
+                    rect.DOAnchorPosX(Mathf.Abs(canvasRect.sizeDelta.x + originalPos.x), slideTime).OnComplete(() => { EndTweening(onShowEnd); });
                     break;
             }
         }
     }
 
-    public void Hide()
+    public void Hide(Action onHideEnd = null)
     {
         if (!isShow)
             return;
@@ -136,10 +136,10 @@ public class UIView : MonoBehaviour
         }
 
         if (slideType == UITransition.NONE)
-            isTweening = false;
+            EndTweening(onHideEnd);
         else
         {
-            rect.DOAnchorPos(originalPos, slideTime).OnComplete(() => { EndTweening(); });
+            rect.DOAnchorPos(originalPos, slideTime).OnComplete(() => { EndTweening(onHideEnd); });
             /*
             switch (slideType)
             {
@@ -160,9 +160,10 @@ public class UIView : MonoBehaviour
         }
     }
 
-    private void EndTweening()
+    private void EndTweening(Action onEnd = null)
     {
         isTweening = false;
+        onEnd?.Invoke();
     }
 
     #region FORCE_HIDE/SHOW

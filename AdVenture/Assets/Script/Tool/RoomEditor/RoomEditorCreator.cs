@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class RoomEditorCreator : UIViewManager
 {
@@ -47,6 +48,7 @@ public class RoomEditorCreator : UIViewManager
         {
             current = Instantiate(elementPrefab, container);
             current.SetData(_item);
+            current.ChangeQuantity(1);
             current.onClick = () => OnClickCallback(current);
             elems.Add(current);
         }
@@ -65,10 +67,9 @@ public class RoomEditorCreator : UIViewManager
         }
     }
 
-    public override void Hide()
+    public override void Hide(Action onHideEnd = null)
     {
-        base.Hide();
-        ClearContainer();
+        base.Hide(ClearContainer);
     }
 
     public void CreateNewRoom()
@@ -94,6 +95,4 @@ public class RoomEditorCreator : UIViewManager
         }
         EventWatcher.DoOnNewRoom(newRoom);
     }
-
-
 }
