@@ -21,6 +21,7 @@ public class MapsManager : MonoBehaviour
     {
         Room createRoom = room;
         ground.ClearAllTiles();
+        wall.ClearAllTiles();
 
         for(int x = 0; x < createRoom.width; x++)
         {

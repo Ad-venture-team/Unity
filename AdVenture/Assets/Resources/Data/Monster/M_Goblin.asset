@@ -19,20 +19,11 @@ MonoBehaviour:
   animationController: {fileID: 9100000, guid: 7ff6ed62a1576b243826d270cad6f93c, type: 2}
   actions:
   - rid: 5281278964213481473
-  - rid: 5281278964213481472
+  - rid: 5281279065519554561
+  - rid: 5281279065519554563
   references:
     version: 2
     RefIds:
-    - rid: 5281278964213481472
-      type: {class: MonsterActionCloseAttack, ns: , asm: Assembly-CSharp}
-      data:
-        condition:
-        - rid: 5281278964213481475
-        angle: 60
-        radius: 3.5
-        attackSpeed: 1
-        previewTime: 2
-        previewPrefab: {fileID: 1408173444559121196, guid: ddfc1ab2f3d8b0a409c1a0d7437e7101, type: 3}
     - rid: 5281278964213481473
       type: {class: MonsterActionChase, ns: , asm: Assembly-CSharp}
       data:
@@ -42,8 +33,34 @@ MonoBehaviour:
     - rid: 5281278964213481474
       type: {class: MonsterActionConditionNearPlayer, ns: , asm: Assembly-CSharp}
       data:
-        distance: {x: 2, y: 15}
-    - rid: 5281278964213481475
+        distance: {x: 10, y: 50}
+    - rid: 5281279065519554561
+      type: {class: MonsterActionAttackProjectile, ns: , asm: Assembly-CSharp}
+      data:
+        condition:
+        - rid: 5281279065519554562
+        projectilePrefab: {fileID: 2241710670611700990, guid: 508c62d84ea5a084a9da99f9dd50e650, type: 3}
+        projectileSpeed: 5
+        icon: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
+        damage: 10
+        nProjectile: 1
+        range: 10
+        angle: 0
+        randomAngle: 0
+        attackSpeed: 2.4
+        previewTime: 1.2
+        previewPrefab: {fileID: -2951393003011872103, guid: fdb1d8d10c9844840af745cc4b3175c8, type: 3}
+    - rid: 5281279065519554562
       type: {class: MonsterActionConditionNearPlayer, ns: , asm: Assembly-CSharp}
       data:
-        distance: {x: 0, y: 2}
+        distance: {x: 5, y: 10}
+    - rid: 5281279065519554563
+      type: {class: MonsterActionFlee, ns: , asm: Assembly-CSharp}
+      data:
+        condition:
+        - rid: 5281279065519554564
+        speed: 5
+    - rid: 5281279065519554564
+      type: {class: MonsterActionConditionNearPlayer, ns: , asm: Assembly-CSharp}
+      data:
+        distance: {x: 0, y: 5}

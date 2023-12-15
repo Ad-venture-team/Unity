@@ -28,17 +28,18 @@ MonoBehaviour:
       data:
         condition:
         - rid: 5281278964213481475
+        damage: 15
         angle: 60
         radius: 3.5
-        attackSpeed: 1
-        previewTime: 2
+        attackSpeed: 3
+        previewTime: 1.8
         previewPrefab: {fileID: 1408173444559121196, guid: ddfc1ab2f3d8b0a409c1a0d7437e7101, type: 3}
     - rid: 5281278964213481473
       type: {class: MonsterActionChase, ns: , asm: Assembly-CSharp}
       data:
         condition:
         - rid: 5281278964213481474
-        speed: 3.2
+        speed: 4.2
     - rid: 5281278964213481474
       type: {class: MonsterActionConditionNearPlayer, ns: , asm: Assembly-CSharp}
       data:

@@ -5,6 +5,7 @@ using DG.Tweening;
 
 public class MonsterActionZoneAttack : MonsterActionState
 {
+    public int damage;
     public float radius;
 
     public float attackSpeed;
@@ -15,6 +16,7 @@ public class MonsterActionZoneAttack : MonsterActionState
     public MonsterCircleAttackPreview previewPrefab;
     private MonsterCircleAttackPreview currentPreview;
     private Vector2 direction;
+    private Vector2 origine;
     private bool isCasting = false;
 
     public override void EnterState(Monster _monster)
@@ -33,6 +35,7 @@ public class MonsterActionZoneAttack : MonsterActionState
             return;
         }
         direction = (_monster.target.position - _monster.transform.position).normalized;
+        origine = _monster.target.position;
         _monster.visual.flipX = direction.x < 0;
         DrawPreview(_monster);
     }
@@ -48,7 +51,8 @@ public class MonsterActionZoneAttack : MonsterActionState
 
     private void LaunchAttack(Monster _monster, float _radius)
     {
-        Debug.Log("Attack");
+        if (Vector2.Distance(origine, PlayerController.Instance.transform.position) <= radius)
+            PlayerController.Instance.TakeDamage(damage);
 
         _monster.transform.DOPunchPosition(direction, 0.1f);
 
@@ -85,6 +89,7 @@ public class MonsterActionZoneAttack : MonsterActionState
         MonsterActionZoneAttack copy = new MonsterActionZoneAttack();
 
         copy.condition = new List<MonsterActionCondition>(condition);
+        copy.damage = damage;
         copy.radius = radius;
 
         copy.attackSpeed = attackSpeed;

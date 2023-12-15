@@ -6,33 +6,28 @@ using UnityEngine.UI;
 public class EnnemiBar : MonoBehaviour
 {
     private List<Monster> monsters = new List<Monster>();
-    private Image imagePrefab;
+    [SerializeField] private Image imagePrefab;
 
     private List<Image> EnnemiSprite = new List<Image>();
 
     private void OnEnable()
     {
-        EventWatcher.onAddMonster += OnNewMonster;
-        EventWatcher.onRemoveMonster += OnRemovedMonster;
+        EventWatcher.onAddMonster += OnNewRoom;
         EventWatcher.onMonsterDie += OnMonsterDeath;
     }
 
     private void OnDisable()
     {
-        EventWatcher.onAddMonster -= OnNewMonster;
-        EventWatcher.onRemoveMonster -= OnRemovedMonster;
+        EventWatcher.onAddMonster -= OnNewRoom;
         EventWatcher.onMonsterDie -= OnMonsterDeath;
     }
 
 
-    private void OnNewMonster(Monster _monster)
+    private void OnNewRoom(Monster _monster)
     {
-        monsters.Add(_monster);
-        Refresh();
-    }
-    private void OnRemovedMonster(Monster _monster)
-    {
-        monsters.Remove(_monster);
+        List<Monster> _monsters = new List<Monster>();
+        EventWatcher.DoGetMonsterList(ref _monsters);
+        monsters = _monsters;
         Refresh();
     }
 

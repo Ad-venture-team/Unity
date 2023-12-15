@@ -4,6 +4,7 @@ using DG.Tweening;
 
 public class MonsterActionCloseAttack : MonsterActionState
 {
+    public int damage;
     public float angle;
     public float radius;
 
@@ -49,7 +50,8 @@ public class MonsterActionCloseAttack : MonsterActionState
     {
         Vector2 targetDir = _monster.transform.position + Quaternion.Euler(0, 0, _angle) * direction;
 
-        Debug.Log("Attack");
+        if (Mathf.Abs(Vector2.Angle(targetDir, PlayerController.Instance.transform.position)) <= angle / 2)
+            PlayerController.Instance.TakeDamage(damage);
 
         _monster.transform.DOPunchPosition(direction, 0.1f);
 
@@ -86,6 +88,7 @@ public class MonsterActionCloseAttack : MonsterActionState
         MonsterActionCloseAttack copy = new MonsterActionCloseAttack();
 
         copy.condition = new List<MonsterActionCondition>(condition);
+        copy.damage = damage;
         copy.angle = angle;
         copy.radius = radius;
 

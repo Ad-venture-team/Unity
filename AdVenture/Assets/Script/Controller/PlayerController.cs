@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : SingletonInstance<PlayerController>
 {
     public enum CharacterState
     {
@@ -17,13 +17,16 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private PlayerAction playerActionControl;
     [SerializeField] private float speed;
+    [SerializeField] private float maxHealth;
+    private float health;
     [SerializeField] private WeaponData weapon;
     private float attackDelay;
     private Vector2 moveInput = new Vector2(0,0);
 
-    private void Awake()
+    protected override void SingleAwake()
     {
         playerActionControl = new PlayerAction();
+        health = maxHealth;
         InitEvent();
     }
 
@@ -95,6 +98,16 @@ public class PlayerController : MonoBehaviour
 
         weapon.SetData(transform, target.transform);
         attackDelay = weapon.attackDelay;
+    }
+
+    public void TakeDamage(int _value)
+    {
+        health -= _value;
+        //EventPlayerLoseHealth
+        Debug.Log($"Loss {_value} health");
+        if (health <= 0)
+            Debug.Log("Dead");
+            //Application.Quit();
     }
 
     private Monster GetClosestMonster()

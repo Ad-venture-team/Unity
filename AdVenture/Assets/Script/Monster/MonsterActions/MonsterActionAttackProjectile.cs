@@ -10,7 +10,7 @@ public class MonsterActionAttackProjectile : MonsterActionState
     public float projectileSpeed;
     public Sprite icon;
 
-
+    public int damage;
     public int nProjectile;
     public float range;
     public float angle;
@@ -69,7 +69,7 @@ public class MonsterActionAttackProjectile : MonsterActionState
             if (randomAngle)
                 currentAngle = UnityEngine.Random.Range(-angle / 2, angle / 2);
             else
-                currentAngle = ((angle / (nProjectile - 1)) * i) - (angle / 2);
+                currentAngle = (angle / (nProjectile - (nProjectile > 1?1:0)) * i) - (angle / 2);
             angles.Add(currentAngle);
         }
     }
@@ -80,7 +80,7 @@ public class MonsterActionAttackProjectile : MonsterActionState
 
         MonsterProjectile newProjectile = GameObject.Instantiate(projectilePrefab);
         newProjectile.InitVector(targetDir, _monster.transform.position);
-        newProjectile.Init(projectileSpeed, range);
+        newProjectile.Init(projectileSpeed, range, damage);
         newProjectile.SetIcon(icon);
 
         _monster.transform.DOPunchPosition(direction, 0.1f);
@@ -129,7 +129,7 @@ public class MonsterActionAttackProjectile : MonsterActionState
         copy.projectileSpeed = projectileSpeed;
         copy.icon = icon;
 
-
+        copy.damage = damage;
         copy.nProjectile = nProjectile;
         copy.range = range;
         copy.angle = angle;
