@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 2
   name: LesserDemon
-  maxHealth: 100
+  maxHealth: 160
   icon: {fileID: 1817443210, guid: 1824cbaea8472a548bd0921254dc12f5, type: 3}
   animationController: {fileID: 9100000, guid: 4dd3b3f82e8232d40b7eefaf3fbd79cc, type: 2}
   actions:

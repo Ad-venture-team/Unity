@@ -32,7 +32,7 @@ public class MonsterManager : MonoBehaviour
         await Task.Delay(3000); //Revoir structure globale de la gameLoop
 
         foreach(RoomElement monsterElem in _room.monsters)
-            AddMonster(DataBase.Instance.monsterData[monsterElem.id], new Vector2(monsterElem.posX, monsterElem.posY));
+            AddMonster(DataBase.Instance.monsterData[monsterElem.id], new Vector2(monsterElem.posX-1, monsterElem.posY-1));
     }
 
     public void AddMonster(MonsterData _data, Vector2 _position)

@@ -17,8 +17,8 @@ public class PlayerController : SingletonInstance<PlayerController>
 
     [SerializeField] private PlayerAction playerActionControl;
     [SerializeField] private float speed;
-    [SerializeField] private float maxHealth;
-    private float health;
+    [SerializeField] private int maxHealth;
+    private int health;
     [SerializeField] private WeaponData weapon;
     private float attackDelay;
     private Vector2 moveInput = new Vector2(0,0);
@@ -56,8 +56,9 @@ public class PlayerController : SingletonInstance<PlayerController>
 
     private void MovePlayerInRoomBound(Room _room)
     {
-        Vector2 randomPos = RandomUtils.RandomVector2(Vector2.zero, new Vector2(_room.width, _room.height));
+        Vector2 randomPos = RandomUtils.RandomVector2(Vector2.zero, new Vector2(_room.width-1, _room.height-1));
         transform.position = randomPos;
+        Heal(100);
     }
 
     private void InitInputEvent()
@@ -120,6 +121,15 @@ public class PlayerController : SingletonInstance<PlayerController>
         if (health <= 0)
             Debug.Log("Dead");
             //Application.Quit();
+    }
+
+    public void Heal(int _value)
+    {
+        int fVal = _value;
+        if (health + fVal > maxHealth)
+            fVal = maxHealth - health;
+
+        health += fVal;
     }
 
     private Monster GetClosestMonster()
