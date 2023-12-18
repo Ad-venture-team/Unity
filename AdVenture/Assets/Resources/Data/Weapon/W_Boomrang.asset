@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: W_Boomrang
   m_EditorClassIdentifier: 
   id: 1
+  name: Boomrang
   damage: 25
   range: 8.25
   speed: 5

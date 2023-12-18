@@ -27,7 +27,14 @@ public class PlayerController : SingletonInstance<PlayerController>
     {
         playerActionControl = new PlayerAction();
         health = maxHealth;
-        InitEvent();
+        InitInputEvent();
+
+        EventWatcher.onNewRoom += MovePlayerInRoomBound;
+    }
+
+    private void OnDestroy()
+    {
+        EventWatcher.onNewRoom -= MovePlayerInRoomBound;
     }
 
     private void Update()
@@ -47,8 +54,13 @@ public class PlayerController : SingletonInstance<PlayerController>
         playerActionControl.Disable();
     }
 
+    private void MovePlayerInRoomBound(Room _room)
+    {
+        Vector2 randomPos = RandomUtils.RandomVector2(Vector2.zero, new Vector2(_room.width, _room.height));
+        transform.position = randomPos;
+    }
 
-    private void InitEvent()
+    private void InitInputEvent()
     {
         playerActionControl.Player.Walk.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
         playerActionControl.Player.Walk.canceled += ctx => moveInput = Vector2.zero;
@@ -118,5 +130,10 @@ public class PlayerController : SingletonInstance<PlayerController>
         if (monsters.Count == 0)
             return null;
         return monsters.OrderBy(t => (t.transform.position-transform.position).sqrMagnitude).First();
+    }
+
+    public void SetWeapon(int _id)
+    {
+        weapon = DataBase.Instance.weaponData[_id];
     }
 }

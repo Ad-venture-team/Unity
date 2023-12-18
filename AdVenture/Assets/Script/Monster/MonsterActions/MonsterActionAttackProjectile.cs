@@ -139,6 +139,8 @@ public class MonsterActionAttackProjectile : MonsterActionState
         copy.previewTime= previewTime;
         copy.previewPrefab = previewPrefab;
 
+        copy.delay = attackSpeed;
+
         return copy;
 }
 }

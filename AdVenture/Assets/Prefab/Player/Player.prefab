@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7824156784668790078}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -106,6 +106,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterState: 0
   speed: 3
+  maxHealth: 0
   weapon: {fileID: 0}
 --- !u!58 &7824156784668790079
 CircleCollider2D:
