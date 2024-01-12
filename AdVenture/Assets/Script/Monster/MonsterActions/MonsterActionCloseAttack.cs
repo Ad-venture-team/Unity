@@ -51,6 +51,7 @@ public class MonsterActionCloseAttack : MonsterActionState
         Vector2 targetDir = _monster.transform.position + Quaternion.Euler(0, 0, _angle) * direction;
 
         if (Mathf.Abs(Vector2.Angle(targetDir, PlayerController.Instance.transform.position)) <= angle / 2)
+            if(Vector2.Distance(targetDir, PlayerController.Instance.transform.position) <= radius)
             PlayerController.Instance.TakeDamage(damage);
 
         _monster.transform.DOPunchPosition(direction, 0.1f);
