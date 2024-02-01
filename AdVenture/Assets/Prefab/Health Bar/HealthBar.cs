@@ -13,6 +13,6 @@ public class HealthBar : MonoBehaviour
 
     private void Update()
     {
-        healthBar.localScale = new Vector3(owner.health / owner.maxHealth, 1,1);
+        healthBar.localScale = new Vector3((float)owner.health / (float)owner.maxHealth, 1,1);
     }
 }

@@ -18,6 +18,7 @@ public class PlayerController : SingletonInstance<PlayerController>
     [SerializeField] private PlayerAction playerActionControl;
     [SerializeField] private float speed;
     [SerializeField] private float maxHealth;
+    [SerializeField] private RectTransform healthBar;
     private float health;
     [SerializeField] private WeaponData weapon;
     private float attackDelay;
@@ -35,6 +36,9 @@ public class PlayerController : SingletonInstance<PlayerController>
         if (attackDelay > 0)
             attackDelay -= Time.deltaTime;
         Move(moveInput);
+        
+        if(this.health > 0)
+            healthBar.localScale = new Vector3((float)this.health / (float)this.maxHealth, 1, 1);
     }
 
     private void OnEnable()
@@ -106,7 +110,9 @@ public class PlayerController : SingletonInstance<PlayerController>
         //EventPlayerLoseHealth
         Debug.Log($"Loss {_value} health");
         if (health <= 0)
-            Debug.Log("Dead");
+        {
+            healthBar.localScale = new Vector3(0, 1, 1);
+        }
             //Application.Quit();
     }
 
