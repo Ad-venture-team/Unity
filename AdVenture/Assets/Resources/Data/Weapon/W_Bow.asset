@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: W_Bow
   m_EditorClassIdentifier: 
   id: 0
-  damage: 34
-  range: 10
+  name: Arc
+  damage: 20
+  range: 15
   speed: 15
-  attackDelay: 0.5
+  attackDelay: 0.7
   projectile: {fileID: -7215942398922641846, guid: 52e1ff53055008045aafb51b2bb7ab77, type: 3}

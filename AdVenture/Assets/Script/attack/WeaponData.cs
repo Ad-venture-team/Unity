@@ -2,6 +2,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Weapon", menuName = "Data/Weapon")]
 public class WeaponData : ScriptableObject,IData {
     public int id;
+    public string name;
     public int damage;
     public float range;
     public float speed;
