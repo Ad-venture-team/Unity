@@ -17,9 +17,9 @@ public class PlayerController : SingletonInstance<PlayerController>
 
     [SerializeField] private PlayerAction playerActionControl;
     [SerializeField] private float speed;
-    [SerializeField] private float maxHealth;
+    [SerializeField] private int maxHealth;
     [SerializeField] private RectTransform healthBar;
-    private float health;
+    private int health;
     [SerializeField] private WeaponData weapon;
     private float attackDelay;
     private Vector2 moveInput = new Vector2(0,0);
@@ -28,7 +28,14 @@ public class PlayerController : SingletonInstance<PlayerController>
     {
         playerActionControl = new PlayerAction();
         health = maxHealth;
-        InitEvent();
+        InitInputEvent();
+
+        EventWatcher.onNewRoom += MovePlayerInRoomBound;
+    }
+
+    private void OnDestroy()
+    {
+        EventWatcher.onNewRoom -= MovePlayerInRoomBound;
     }
 
     private void Update()
@@ -51,8 +58,14 @@ public class PlayerController : SingletonInstance<PlayerController>
         playerActionControl.Disable();
     }
 
+    private void MovePlayerInRoomBound(Room _room)
+    {
+        Vector2 randomPos = RandomUtils.RandomVector2(Vector2.zero, new Vector2(_room.width-1, _room.height-1));
+        transform.position = randomPos;
+        Heal(100);
+    }
 
-    private void InitEvent()
+    private void InitInputEvent()
     {
         playerActionControl.Player.Walk.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
         playerActionControl.Player.Walk.canceled += ctx => moveInput = Vector2.zero;
@@ -116,6 +129,15 @@ public class PlayerController : SingletonInstance<PlayerController>
             //Application.Quit();
     }
 
+    public void Heal(int _value)
+    {
+        int fVal = _value;
+        if (health + fVal > maxHealth)
+            fVal = maxHealth - health;
+
+        health += fVal;
+    }
+
     private Monster GetClosestMonster()
     {
         List<Monster> monsters = new List<Monster>();
@@ -124,5 +146,10 @@ public class PlayerController : SingletonInstance<PlayerController>
         if (monsters.Count == 0)
             return null;
         return monsters.OrderBy(t => (t.transform.position-transform.position).sqrMagnitude).First();
+    }
+
+    public void SetWeapon(int _id)
+    {
+        weapon = DataBase.Instance.weaponData[_id];
     }
 }

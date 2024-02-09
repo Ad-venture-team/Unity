@@ -57,6 +57,23 @@ public class RoomEditorPanel : UIViewManager
         }
     }
 
+    public void LoadWeapon()
+    {
+        ClearContainer();
+        List<WeaponData> weaponData = DataBase.Instance.weaponData.Values.ToList();
+        for (int i = 0; i < weaponData.Count; i++)
+        {
+            if (elems.Count <= i)
+                elems.Add(Instantiate(elementPrefab, container));
+
+            RoomElementUI current = elems[i];
+            RoomElementItem newItem = new RoomElementItem(weaponData[i].id, RoomElementType.WEAPON);
+            current.SetData(newItem);
+            current.onClick = () => PlayerController.Instance.SetWeapon(newItem.id);
+            current.gameObject.SetActive(true);
+        }
+    }
+
     public void FixedUpdate()
     {
         if (Keyboard.current.ctrlKey.isPressed && Keyboard.current.shiftKey.isPressed && Keyboard.current.rKey.wasPressedThisFrame)

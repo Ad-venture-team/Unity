@@ -22,6 +22,7 @@ public class MonsterProjectile : MonoBehaviour
     {
         direction = _direction;
         transform.position = _origine;
+        transform.up = direction - transform.position;
         origine = _origine;
     } 
 
@@ -32,7 +33,8 @@ public class MonsterProjectile : MonoBehaviour
 
     public void FixedUpdate()
     {
-        transform.position += (-origine + direction).normalized * speed * Time.deltaTime;
+        //transform.position += (-origine + direction).normalized * speed * Time.deltaTime;
+        transform.position += transform.up.normalized * speed * Time.deltaTime;
 
         float dist = Vector2.Distance(transform.position, origine);
         if (dist >= maxDistance)
@@ -41,13 +43,18 @@ public class MonsterProjectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.gameObject.CompareTag("mob"))
+            return;
+
         PlayerController player;
         if (collision.TryGetComponent(out player))
             player.TakeDamage(damage);
+
+        Destroy(gameObject);
     }
 
     public void OnBecameInvisible()
     {
-        Destroy(this.gameObject);
+        Destroy(gameObject);
     }
 }

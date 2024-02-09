@@ -10,12 +10,12 @@ public class GameManager : MonoBehaviour
     public Vector2Int maxRoomSize;
     private void Awake()
     {
-        EventWatcher.onEndRoom += NewRoom;
+        EventWatcher.onEndRoom += CreateNewRoom;
     }
 
     private void OnDestroy()
     {
-        EventWatcher.onEndRoom -= NewRoom;
+        EventWatcher.onEndRoom -= CreateNewRoom;
     }
 
     private void Start()
@@ -41,11 +41,5 @@ public class GameManager : MonoBehaviour
             firstRoom.monsters.Add(newRoomElem);
         }
         EventWatcher.DoOnNewRoom(firstRoom);
-    }
-
-    private async void NewRoom()
-    {
-        await Task.Delay(3000);
-        CreateNewRoom();
     }
 }
