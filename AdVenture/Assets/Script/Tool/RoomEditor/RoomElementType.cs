@@ -4,4 +4,5 @@ public enum RoomElementType
     MONSTER = 1,
     PUB = 2,
     WEAPON = 3,
+    UPGRADE = 4,
 }

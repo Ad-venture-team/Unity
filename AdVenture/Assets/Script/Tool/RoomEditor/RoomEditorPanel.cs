@@ -73,6 +73,22 @@ public class RoomEditorPanel : UIViewManager
             current.gameObject.SetActive(true);
         }
     }
+    public void LoadPlayerUpgrade()
+    {
+        ClearContainer();
+        List<PlayerUpgradeData>upgradeData = DataBase.Instance.upgradeData.Values.ToList();
+        for (int i = 0; i < upgradeData.Count; i++)
+        {
+            if (elems.Count <= i)
+                elems.Add(Instantiate(elementPrefab, container));
+
+            RoomElementUI current = elems[i];
+            RoomElementItem newItem = new RoomElementItem(upgradeData[i].id, RoomElementType.UPGRADE);
+            current.SetData(newItem);
+            current.onClick = () => DataBase.Instance.upgradeData[newItem.id].GetUpgrade();
+            current.gameObject.SetActive(true);
+        }
+    }
 
     public void FixedUpdate()
     {

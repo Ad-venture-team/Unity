@@ -35,6 +35,11 @@ public class RoomElementUI : MonoBehaviour, IPointerClickHandler
                 icon.sprite = null;
                 header.text = weaponData.name;
                 break;
+            case RoomElementType.UPGRADE:
+                PlayerUpgradeData upgradeData = DataBase.Instance.upgradeData[_item.id];
+                icon.sprite = null;
+                header.text = upgradeData.name;
+                break;
             default:
                 break;
         }

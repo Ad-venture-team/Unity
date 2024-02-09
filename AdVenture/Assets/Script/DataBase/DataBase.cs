@@ -7,6 +7,7 @@ public class DataBase : SingletonBehaviour<DataBase>
     public Dictionary<int, PubData> pubData = new Dictionary<int, PubData>();
     public Dictionary<int, TileData> tileData = new Dictionary<int, TileData>();
     public Dictionary<int, WeaponData> weaponData = new Dictionary<int, WeaponData>();
+    public Dictionary<int, PlayerUpgradeData> upgradeData = new Dictionary<int, PlayerUpgradeData>();
 
     void Awake()
     {
@@ -19,6 +20,7 @@ public class DataBase : SingletonBehaviour<DataBase>
         LoadPubs();
         LoadTile();
         LoadWeapon();
+        LoadUpgrade();
     }
 
     private Dictionary<int, T> Load<T>(string path) where T : Object, IData
@@ -48,6 +50,11 @@ public class DataBase : SingletonBehaviour<DataBase>
     private void LoadWeapon()
     {
         weaponData = Load<WeaponData>("Data/Weapon");
+    }    
+    
+    private void LoadUpgrade()
+    {
+        upgradeData = Load<PlayerUpgradeData>("Data/PlayerUpgrade");
     }
 
 
