@@ -8,9 +8,9 @@ public class WeaponData : ScriptableObject,IData {
     public float attackDelay;
     public ProjectileBehaviour projectile;
 
-    public void SetData(Transform player, Transform monstre) {
+    public void SetData(Transform player, Transform monstre,float _dmgMod) {
         ProjectileBehaviour p = Instantiate(projectile,player.position,Quaternion.identity,null);
-        p.SetData(player, monstre, this);
+        p.SetData(player, monstre, this,_dmgMod);
     }
 
     int IData.GetId() {

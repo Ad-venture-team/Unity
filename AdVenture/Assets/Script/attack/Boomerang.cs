@@ -11,11 +11,11 @@ public class Boomerang : ProjectileBehaviour {
     bool isReturning = false;
     int Bezier = 1;
 
-    public override void SetData (Transform _player, Transform monstre, WeaponData d) {
+    public override void SetData (Transform _player, Transform monstre, WeaponData d, float _dmgMod) {
         player=_player;
         weaponData=d;
-
-        target=monstre.position;
+        damageModificator = _dmgMod;
+        target =monstre.position;
         Vector2 dirMob = (target-(Vector2)_player.position).normalized*6;
 
         Controls[0]=(Vector2)_player.position+dirMob+PerpendicularCw(dirMob).normalized*2+(-dirMob).normalized*3;
@@ -107,6 +107,6 @@ public class Boomerang : ProjectileBehaviour {
     {
         Monster monster;
         if (collision.TryGetComponent(out monster))
-            monster.TakeDamage(weaponData.damage);
+            monster.TakeDamage(weaponData.damage + (int)damageModificator);
     }
 }

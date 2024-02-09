@@ -5,9 +5,10 @@ using UnityEngine;
 public class BulletScript : ProjectileBehaviour {
 
     [SerializeField] private float threshold = .005f;
-    public override void SetData(Transform player, Transform monstre, WeaponData d) {
+    public override void SetData(Transform player, Transform monstre, WeaponData d, float _dmgMod) {
         target=monstre.position;
         weaponData = d;
+        damageModificator = _dmgMod;
     }
 
     void Update() {
@@ -24,7 +25,7 @@ public class BulletScript : ProjectileBehaviour {
     {
         Monster monster;
         if (collision.TryGetComponent(out monster))
-            monster.TakeDamage(weaponData.damage);
+            monster.TakeDamage(weaponData.damage + (int)damageModificator);
 
         Destroy(gameObject);
     }
