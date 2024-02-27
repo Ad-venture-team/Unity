@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: W_Boomrang
   m_EditorClassIdentifier: 
   id: 1
-  name: Boomrang
-  damage: 20
+  damage: 0
   range: 8.25
-  speed: 7
+  speed: 5
   attackDelay: 1
   projectile: {fileID: 7876761932926658100, guid: cb1ab2c9190360c4abfd724e71efff51, type: 3}

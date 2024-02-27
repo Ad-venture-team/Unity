@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using System.Threading.Tasks;
 
 public class MonsterManager : MonoBehaviour
@@ -8,6 +9,8 @@ public class MonsterManager : MonoBehaviour
 
     public Monster monsterPrefab;
     List<Monster> monsters = new List<Monster>();
+
+    [SerializeField] private Tilemap mapTile;
 
     private void OnEnable()
     {
