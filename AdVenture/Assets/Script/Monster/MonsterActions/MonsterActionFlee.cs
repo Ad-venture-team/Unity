@@ -13,8 +13,13 @@ public class MonsterActionFlee : MonsterActionState
             return;
 
         //Voir pour mettre un A* ici
+        PathFinding pathTravel = new PathFinding(MapsManager.Instance.GetValidePlace(), _monster.gameObject.transform.position, _monster.target.position);
+        List<Vector3> place = pathTravel.FindHighestPath();
+        Vector3 goTo = place[1];
 
-        _monster.transform.position += (_monster.transform.position - _monster.target.position).normalized * speed * Time.deltaTime;
+        Debug.Log(_monster.data.name + " Flee");
+
+        _monster.transform.position += (goTo - _monster.transform.position).normalized * speed * Time.deltaTime;
     }
 
     public override MonsterActionState GetCopy()
