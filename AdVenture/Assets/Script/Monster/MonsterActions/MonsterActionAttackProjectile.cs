@@ -100,7 +100,7 @@ public class MonsterActionAttackProjectile : MonsterActionState
 
             currentPreview = previews[i];
             Vector2 targetDir = Quaternion.Euler(0, 0, currentAngle) * direction;
-            currentPreview.DrawLinePreview(_monster.transform.position, targetDir, range, 1);
+            currentPreview.DrawLinePreview(_monster.transform.position, targetDir, range, .5f);
             currentPreview.SetValue(previewTime, () => LaunchAttack(_monster, currentAngle));
         }
     }
@@ -138,6 +138,8 @@ public class MonsterActionAttackProjectile : MonsterActionState
         copy.attackSpeed= attackSpeed;
         copy.previewTime= previewTime;
         copy.previewPrefab = previewPrefab;
+
+        copy.delay = attackSpeed;
 
         return copy;
 }

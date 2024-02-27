@@ -30,6 +30,11 @@ public class RoomElementUI : MonoBehaviour, IPointerClickHandler
                 icon.sprite = null;
                 header.text = pubData.name;
                 break;
+            case RoomElementType.WEAPON:
+                WeaponData weaponData = DataBase.Instance.weaponData[_item.id];
+                icon.sprite = null;
+                header.text = weaponData.name;
+                break;
             default:
                 break;
         }

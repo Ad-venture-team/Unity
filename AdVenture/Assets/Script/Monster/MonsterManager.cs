@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using System.Threading.Tasks;
 
 public class MonsterManager : MonoBehaviour
 {
@@ -23,15 +24,18 @@ public class MonsterManager : MonoBehaviour
         EventWatcher.onNewRoom -= LoadRoom;
     }
 
-    private void LoadRoom(Room _room)
+    private async void LoadRoom(Room _room)
     {
+
         foreach (Transform T in transform)
             Destroy(T.gameObject);
 
         monsters.Clear();
 
+        await Task.Delay(3000); //Revoir structure globale de la gameLoop
+
         foreach(RoomElement monsterElem in _room.monsters)
-            AddMonster(DataBase.Instance.monsterData[monsterElem.id], new Vector2(monsterElem.posX, monsterElem.posY));
+            AddMonster(DataBase.Instance.monsterData[monsterElem.id], new Vector2(monsterElem.posX-1, monsterElem.posY-1));
     }
 
     public void AddMonster(MonsterData _data, Vector2 _position)

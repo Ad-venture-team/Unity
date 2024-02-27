@@ -46,13 +46,13 @@ public class MonsterActionCloseAttack : MonsterActionState
         UnCastAttack(_monster);
     }
 
-    private void LaunchAttack(Monster _monster, float _angle, float _radius)
+    private void LaunchAttack(Monster _monster)
     {
-        Vector2 targetDir = _monster.transform.position + Quaternion.Euler(0, 0, _angle) * direction;
+        Vector2 targetPos = PlayerController.Instance.transform.position - _monster.transform.position;
 
-        if (Mathf.Abs(Vector2.Angle(targetDir, PlayerController.Instance.transform.position)) <= angle / 2)
-            if(Vector2.Distance(targetDir, PlayerController.Instance.transform.position) <= radius)
-            PlayerController.Instance.TakeDamage(damage);
+        if (Mathf.Abs(Vector2.Angle(direction, targetPos)) <= angle / 2)
+            if (Vector2.Distance(_monster.transform.position, PlayerController.Instance.transform.position) <= radius)
+                PlayerController.Instance.TakeDamage(damage);
 
         _monster.transform.DOPunchPosition(direction, 0.1f);
 
@@ -66,7 +66,7 @@ public class MonsterActionCloseAttack : MonsterActionState
             currentPreview = GameObject.Instantiate(previewPrefab, _monster.transform);
 
             currentPreview.DrawCirclePreview(_monster.transform.position, direction, angle, radius);
-            currentPreview.SetValue(previewTime, () => LaunchAttack(_monster, angle, radius));
+            currentPreview.SetValue(previewTime, () => LaunchAttack(_monster));
     }
 
     private void CastAttack(Monster _monster)
@@ -96,6 +96,8 @@ public class MonsterActionCloseAttack : MonsterActionState
         copy.attackSpeed = attackSpeed;
         copy.previewTime = previewTime;
         copy.previewPrefab = previewPrefab;
+
+        copy.delay = attackSpeed;
 
         return copy;
     }
