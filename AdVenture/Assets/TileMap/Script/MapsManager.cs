@@ -111,4 +111,14 @@ public class MapsManager : MonoBehaviour
         cinemachine.InvalidateCache();
 
     }
+
+    private void OnDrawGizmos()
+    {
+        HashSet<Vector3> pos = GetValidePlace();
+        foreach (Vector3 P in pos)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawCube(P, Vector3.one);
+        }
+    }
 }

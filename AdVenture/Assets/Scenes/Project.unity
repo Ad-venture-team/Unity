@@ -408,12 +408,36 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8108041467959422068, guid: db8fd352ecf8dd045895c70b9f52336f, type: 3}
+      propertyPath: m_TileAnchor.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8108041467959422068, guid: db8fd352ecf8dd045895c70b9f52336f, type: 3}
+      propertyPath: m_TileAnchor.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8108041467959422068, guid: db8fd352ecf8dd045895c70b9f52336f, type: 3}
+      propertyPath: m_TileOrientation
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8108041467959422071, guid: db8fd352ecf8dd045895c70b9f52336f, type: 3}
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8108041468655715716, guid: db8fd352ecf8dd045895c70b9f52336f, type: 3}
       propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8108041468655715737, guid: db8fd352ecf8dd045895c70b9f52336f, type: 3}
+      propertyPath: m_TileAnchor.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8108041468655715737, guid: db8fd352ecf8dd045895c70b9f52336f, type: 3}
+      propertyPath: m_TileAnchor.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8108041468655715737, guid: db8fd352ecf8dd045895c70b9f52336f, type: 3}
+      propertyPath: m_TileOrientation
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8108041468826557386, guid: db8fd352ecf8dd045895c70b9f52336f, type: 3}

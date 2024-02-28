@@ -16,7 +16,7 @@ public class PathFinding
         grid = ValidePlace;
         position = startPoint;
         destination = finalDestination;
-        moovPoint = 3;
+        moovPoint = 1;
     }
 
     public List<Vector3> FindLowestPath()
@@ -65,14 +65,15 @@ public class PathFinding
         Vector3 startingPoint = position;
         Vector3 endPoint = destination;
 
-        List<Vector3> opendList = new List<Vector3>();
+        List<Vector3> opendList = GetNeighbourList(startingPoint);
+        Vector3 currentNode = GetHighestCostTile(opendList);
+        return new List<Vector3> { currentNode };
         List<Vector3> closedList = new List<Vector3>();
 
         opendList.Add(startingPoint);
 
         while (opendList.Count > 0)
         {
-            Vector3 currentNode = GetHighestCostTile(opendList);
             if (currentNode == endPoint || closedList.Count == moovPoint)
             {
                 closedList.Add(currentNode);
@@ -114,38 +115,39 @@ public class PathFinding
     private List<Vector3> GetNeighbourList(Vector3 currentNode)
     {
         List<Vector3> neighbourList = new List<Vector3>();
+        currentNode = new Vector3((int)currentNode.x, (int)currentNode.y, (int)currentNode.z);
 
-        if (grid.Contains(Vector3Int.FloorToInt(new Vector3(currentNode.x - 1, currentNode.y, 0))))
+        if (grid.Contains(new Vector3(currentNode.x - 1, currentNode.y, 0)))
         {
             neighbourList.Add(new Vector3(currentNode.x - 1, currentNode.y, 0));
         }
-        if (grid.Contains(Vector3Int.FloorToInt(new Vector3(currentNode.x + 1, currentNode.y, 0))))
+        if (grid.Contains(new Vector3(currentNode.x + 1, currentNode.y, 0)))
         {
             neighbourList.Add(new Vector3(currentNode.x + 1, currentNode.y, 0));
         }
-        if (grid.Contains(Vector3Int.FloorToInt(new Vector3(currentNode.x, currentNode.y - 1, 0))))
+        if (grid.Contains(new Vector3(currentNode.x, currentNode.y - 1, 0)))
         {
             neighbourList.Add(new Vector3(currentNode.x, currentNode.y - 1, 0));
         }
-        if (grid.Contains(Vector3Int.FloorToInt(new Vector3(currentNode.x, currentNode.y + 1, 0))))
+        if (grid.Contains(new Vector3(currentNode.x, currentNode.y + 1, 0)))
         {
             neighbourList.Add(new Vector3(currentNode.x, currentNode.y + 1, 0));
         }
 
 
-        if (grid.Contains(Vector3Int.FloorToInt(new Vector3(currentNode.x + 1, currentNode.y + 1, 0))))
+        if (grid.Contains(new Vector3(currentNode.x + 1, currentNode.y + 1, 0)))
         {
             neighbourList.Add(new Vector3(currentNode.x+1, currentNode.y + 1, 0));
         }
-        if (grid.Contains(Vector3Int.FloorToInt(new Vector3(currentNode.x - 1, currentNode.y + 1, 0))))
+        if (grid.Contains(new Vector3(currentNode.x - 1, currentNode.y + 1, 0)))
         {
             neighbourList.Add(new Vector3(currentNode.x -1, currentNode.y + 1, 0));
         }
-        if (grid.Contains(Vector3Int.FloorToInt(new Vector3(currentNode.x + 1, currentNode.y - 1, 0))))
+        if (grid.Contains(new Vector3(currentNode.x + 1, currentNode.y - 1, 0)))
         {
             neighbourList.Add(new Vector3(currentNode.x +1, currentNode.y - 1, 0));
         }
-        if (grid.Contains(Vector3Int.FloorToInt(new Vector3(currentNode.x - 1, currentNode.y - 1, 0))))
+        if (grid.Contains(new Vector3(currentNode.x - 1, currentNode.y - 1, 0)))
         {
             neighbourList.Add(new Vector3(currentNode.x -1, currentNode.y - 1, 0));
         }
@@ -160,6 +162,14 @@ public class PathFinding
         int remaining = (int)Mathf.Abs(xDistance - yDistance);
         int goReturned = MOVE_COST * (int)Mathf.Min(xDistance, yDistance) + MOVE_COST * remaining;
         return goReturned;
+    }
+
+    private int HeuristicTileCost(Vector3 _tile)
+    {
+        int gCost = (int)Vector2.Distance(position, _tile);
+        int hCost = (int)Vector2.Distance(destination, _tile);
+        int fCost = gCost + hCost;
+        return fCost;
     }
 
     private List<int> CalculateListFDistance(List<Vector3> openListDetected, Vector3 destination)

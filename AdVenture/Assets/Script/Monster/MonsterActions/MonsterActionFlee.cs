@@ -15,7 +15,7 @@ public class MonsterActionFlee : MonsterActionState
         //Voir pour mettre un A* ici
         PathFinding pathTravel = new PathFinding(MapsManager.Instance.GetValidePlace(), _monster.gameObject.transform.position, _monster.target.position);
         List<Vector3> place = pathTravel.FindHighestPath();
-        Vector3 goTo = place[1];
+        Vector3 goTo = place[0];
 
         Debug.Log(_monster.data.name + " Flee");
 
