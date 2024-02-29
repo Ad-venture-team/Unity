@@ -8,7 +8,10 @@ public class MonsterData : ScriptableObject, IData
 
     public string name;
 
+    public MonsterType type;
+
     public int maxHealth;
+    public int baseAttack;
 
     public Sprite icon;
     public RuntimeAnimatorController animationController;

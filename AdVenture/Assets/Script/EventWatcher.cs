@@ -28,5 +28,8 @@ public static class EventWatcher
     public static event OnGetValue<List<Monster>> getMonsterList;
     public static void DoGetMonsterList(ref List<Monster> _allMonster) => getMonsterList?.Invoke(ref _allMonster);
 
+    public static event Action<float, UpgradeType, MonsterType> onAddMonsterUpgrade;
+    public static void DoAddMonsterUpgrade(float _value,UpgradeType _upgrade, MonsterType _type) => onAddMonsterUpgrade?.Invoke(_value, _upgrade, _type);
+
     #endregion
 }

@@ -28,7 +28,12 @@ public class Monster : MonoBehaviour, IDamageable
     {
         data = _data;
         allAction = data.GetActions();
-        maxHealth = _data.maxHealth;
+        float fMaxHealth = data.maxHealth;
+        List<float> healthMod = MasterUpgradeManager.Instance.GetUpgradesValue(data.type, UpgradeType.MAX_HEALTH);
+        for (int i = 0; i < healthMod.Count; i++)
+            fMaxHealth += healthMod[i] * data.maxHealth;
+
+        maxHealth = (int)fMaxHealth;
         health = maxHealth;
         animator.runtimeAnimatorController = _data.animationController;
     }
@@ -83,6 +88,15 @@ public class Monster : MonoBehaviour, IDamageable
             gameObject.SetActive(false);
             EventWatcher.DoOnMonsterDie(this);
         }
+    }
+
+    public int GetAttackValue()
+    {
+        List<float> mods = MasterUpgradeManager.Instance.GetUpgradesValue(data.type, UpgradeType.DAMAGE);
+        float result = data.baseAttack;
+        for (int i = 0; i < mods.Count; i++)
+            result += data.baseAttack * mods[i];
+        return (int)result;
     }
 
     public bool IsDead()

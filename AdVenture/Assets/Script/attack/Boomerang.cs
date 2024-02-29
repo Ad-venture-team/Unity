@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Boomerang : ProjectileBehaviour {
     Vector2 StartPoint;
@@ -11,7 +12,7 @@ public class Boomerang : ProjectileBehaviour {
     bool isReturning = false;
     int Bezier = 1;
 
-    public override void SetData (Transform _player, Transform monstre, WeaponData d, float _dmgMod) {
+    public override void SetData (Transform _player, Transform monstre, WeaponData d, List<float> _dmgMod) {
         player=_player;
         weaponData=d;
         damageModificator = _dmgMod;
@@ -110,6 +111,11 @@ public class Boomerang : ProjectileBehaviour {
 
         Monster monster;
         if (collision.TryGetComponent(out monster))
-            monster.TakeDamage(weaponData.damage + (int)damageModificator);
+        {
+            float fDmg = weaponData.damage;
+            for (int i = 0; i < damageModificator.Count; i++)
+                fDmg += weaponData.damage * damageModificator[i];
+            monster.TakeDamage((int)fDmg);
+        }
     }
 }

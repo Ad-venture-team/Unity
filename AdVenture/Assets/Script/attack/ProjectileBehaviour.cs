@@ -5,6 +5,6 @@ using UnityEngine;
 public abstract class ProjectileBehaviour : MonoBehaviour {
     [HideInInspector] public WeaponData weaponData;
     [HideInInspector] public Vector2 target;
-    protected float damageModificator;
-    public abstract void SetData(Transform player, Transform monstre, WeaponData weaponData, float _dmgMod);
+    protected List<float> damageModificator = new List<float>();
+    public abstract void SetData(Transform player, Transform monstre, WeaponData weaponData, List<float> _dmgMods);
 }

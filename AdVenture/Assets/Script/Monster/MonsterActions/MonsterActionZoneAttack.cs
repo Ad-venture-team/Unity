@@ -5,7 +5,7 @@ using DG.Tweening;
 
 public class MonsterActionZoneAttack : MonsterActionState
 {
-    public int damage;
+    public float baseAttackPercent;
     public float radius;
 
     public float attackSpeed;
@@ -52,7 +52,7 @@ public class MonsterActionZoneAttack : MonsterActionState
     private void LaunchAttack(Monster _monster, float _radius)
     {
         if (Vector2.Distance(origine, PlayerController.Instance.transform.position) <= radius)
-            PlayerController.Instance.TakeDamage(damage);
+            PlayerController.Instance.TakeDamage((int)(_monster.GetAttackValue() * baseAttackPercent));
 
         _monster.transform.DOPunchPosition(direction, 0.1f);
 
@@ -78,7 +78,10 @@ public class MonsterActionZoneAttack : MonsterActionState
 
     private void UnCastAttack(Monster _monster)
     {
+        List<float> attSpeedMod = MasterUpgradeManager.Instance.GetUpgradesValue(_monster.data.type, UpgradeType.ATTACK_SPEED);
         delay = attackSpeed;
+        for (int i = 0; i < attSpeedMod.Count; i++)
+            delay += attSpeedMod[i] * attackSpeed;
         isCasting = false;
         _monster.lockInState = false;
         _monster.animator.speed = 1;
@@ -89,7 +92,7 @@ public class MonsterActionZoneAttack : MonsterActionState
         MonsterActionZoneAttack copy = new MonsterActionZoneAttack();
 
         copy.condition = new List<MonsterActionCondition>(condition);
-        copy.damage = damage;
+        copy.baseAttackPercent = baseAttackPercent;
         copy.radius = radius;
 
         copy.attackSpeed = attackSpeed;

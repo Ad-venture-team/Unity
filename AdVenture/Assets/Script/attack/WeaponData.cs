@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections.Generic;
+
 [CreateAssetMenu(fileName = "Weapon", menuName = "Data/Weapon")]
 public class WeaponData : ScriptableObject,IData {
     public int id;
@@ -9,9 +11,9 @@ public class WeaponData : ScriptableObject,IData {
     public float attackDelay;
     public ProjectileBehaviour projectile;
 
-    public void SetData(Transform player, Transform monstre,float _dmgMod) {
+    public void SetData(Transform player, Transform monstre,List<float> _dmgMods) {
         ProjectileBehaviour p = Instantiate(projectile,player.position,Quaternion.identity,null);
-        p.SetData(player, monstre, this,_dmgMod);
+        p.SetData(player, monstre, this,_dmgMods);
     }
 
     int IData.GetId() {

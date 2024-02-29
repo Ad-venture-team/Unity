@@ -13,6 +13,7 @@ public class PlayerUpgradeData : ScriptableObject, IData
         for (int i = 0; i < behaviours.Count; i++)
             behaviours[i].DoUpgrade();
     }
+
     public int GetId()
     {
         return id;

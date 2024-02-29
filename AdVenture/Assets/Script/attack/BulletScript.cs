@@ -1,11 +1,12 @@
 using System.Linq;
 using UnityEngine;
+using System.Collections.Generic;
 
 
 public class BulletScript : ProjectileBehaviour {
 
     [SerializeField] private float threshold = .005f;
-    public override void SetData(Transform player, Transform monstre, WeaponData d, float _dmgMod) {
+    public override void SetData(Transform player, Transform monstre, WeaponData d, List<float> _dmgMod) {
         target=monstre.position;
         weaponData = d;
         damageModificator = _dmgMod;
@@ -28,7 +29,14 @@ public class BulletScript : ProjectileBehaviour {
 
         Monster monster;
         if (collision.TryGetComponent(out monster))
-            monster.TakeDamage(weaponData.damage + (int)damageModificator);
+        {
+            float fDmg = weaponData.damage;
+            for (int i = 0; i < damageModificator.Count; i++)
+            {
+                fDmg += weaponData.damage * damageModificator[i];
+            }
+            monster.TakeDamage((int)fDmg);
+        }
 
         Destroy(gameObject);
     }

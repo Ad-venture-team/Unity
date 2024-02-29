@@ -10,7 +10,7 @@ public class MonsterActionAttackProjectile : MonsterActionState
     public float projectileSpeed;
     public Sprite icon;
 
-    public int damage;
+    public float baseAttackPercent;
     public int nProjectile;
     public float range;
     public float angle;
@@ -80,7 +80,7 @@ public class MonsterActionAttackProjectile : MonsterActionState
 
         MonsterProjectile newProjectile = GameObject.Instantiate(projectilePrefab);
         newProjectile.InitVector(targetDir, _monster.transform.position);
-        newProjectile.Init(projectileSpeed, range, damage);
+        newProjectile.Init(projectileSpeed, range, (int)(_monster.GetAttackValue() * baseAttackPercent));
         newProjectile.SetIcon(icon);
 
         _monster.transform.DOPunchPosition(direction, 0.1f);
@@ -114,7 +114,11 @@ public class MonsterActionAttackProjectile : MonsterActionState
 
     private void UnCastAttack(Monster _monster)
     {
+        List<float> attSpeedMod = MasterUpgradeManager.Instance.GetUpgradesValue(_monster.data.type, UpgradeType.ATTACK_SPEED);
         delay = attackSpeed;
+        for (int i = 0; i < attSpeedMod.Count; i++)
+            delay += attSpeedMod[i] * attackSpeed;
+
         isCasting = false;
         _monster.lockInState = false;
         _monster.animator.speed = 1;
@@ -129,7 +133,7 @@ public class MonsterActionAttackProjectile : MonsterActionState
         copy.projectileSpeed = projectileSpeed;
         copy.icon = icon;
 
-        copy.damage = damage;
+        copy.baseAttackPercent = baseAttackPercent;
         copy.nProjectile = nProjectile;
         copy.range = range;
         copy.angle = angle;

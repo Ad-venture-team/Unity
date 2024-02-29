@@ -80,12 +80,12 @@ public class PlayerController : SingletonInstance<PlayerController>
             return;
         }
 
-        float speedModifier = 0;
+        float fSpeed = speed;
         List<float> speedUpgrades = GetUpgradesValue(UpgradeType.SPEED);
         for (int i = 0; i < speedUpgrades.Count; i++)
-            speedModifier += speedUpgrades[i];
+            fSpeed += speed * speedUpgrades[i];
 
-        transform.position += parametre.normalized * (speed + speedModifier) * Time.deltaTime;
+        transform.position += parametre.normalized * fSpeed * Time.deltaTime;
     }
 
     private void Attack()
@@ -97,16 +97,13 @@ public class PlayerController : SingletonInstance<PlayerController>
         if (target == null || ((target.transform.position - transform.position).sqrMagnitude > weapon.range* weapon.range))
         return;
 
-        float damageModifier = 0;
         List<float> dmgUpgrades = GetUpgradesValue(UpgradeType.DAMAGE);
-        for (int i = 0; i < dmgUpgrades.Count; i++)
-            damageModifier += dmgUpgrades[i];
 
-        weapon.SetData(transform, target.transform, damageModifier);
+        weapon.SetData(transform, target.transform, dmgUpgrades);
         attackDelay = weapon.attackDelay;
         List<float> attSpeedUpgrades = GetUpgradesValue(UpgradeType.ATTACK_SPEED);
         for (int i = 0; i < attSpeedUpgrades.Count; i++)
-            attackDelay *= attSpeedUpgrades[i];
+            attackDelay += attSpeedUpgrades[i] * weapon.attackDelay;
     }
 
     public void TakeDamage(int _value)
@@ -156,8 +153,7 @@ public class PlayerController : SingletonInstance<PlayerController>
     {
         List<float> result = new List<float>();
         if (upgrades.ContainsKey(_type))
-            for (int i = 0; i < upgrades[_type].Count; i++)
-                result.Add(upgrades[_type][i]);
+                result.AddRange(upgrades[_type]);
         return result;
     }
 }

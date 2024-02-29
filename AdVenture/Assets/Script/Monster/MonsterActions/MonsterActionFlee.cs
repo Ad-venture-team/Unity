@@ -7,6 +7,15 @@ using System;
 public class MonsterActionFlee : MonsterActionState
 {
     public float speed;
+    private float fSpeed;
+
+    public override void EnterState(Monster _monster)
+    {
+        List<float> speedMod = MasterUpgradeManager.Instance.GetUpgradesValue(_monster.data.type, UpgradeType.SPEED);
+        fSpeed = speed;
+        for (int i = 0; i < speedMod.Count; i++)
+            fSpeed += speedMod[i] * speed;
+    }
     public override void UpdateState(Monster _monster)
     {
         if (_monster.target == null)
@@ -19,7 +28,8 @@ public class MonsterActionFlee : MonsterActionState
 
         Debug.Log(_monster.data.name + " Flee");
 
-        _monster.transform.position += (goTo - _monster.transform.position).normalized * speed * Time.deltaTime;
+        _monster.transform.position += (goTo - _monster.transform.position).normalized * fSpeed * Time.deltaTime;
+        _monster.visual.flipX = (goTo - _monster.transform.position).normalized.x < 0;
     }
 
     public override MonsterActionState GetCopy()

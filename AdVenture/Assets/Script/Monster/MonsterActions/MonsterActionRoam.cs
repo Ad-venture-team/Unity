@@ -7,6 +7,7 @@ using System;
 public class MonsterActionRoam : MonsterActionState
 {
     public float speed;
+    private float fSpeed;
     public float range;
     public float waitingTime;
     private float delay;
@@ -17,7 +18,11 @@ public class MonsterActionRoam : MonsterActionState
     public override void EnterState(Monster _monster)
     {
         NewRoamPosition(_monster);
-        
+        List<float> speedMod = MasterUpgradeManager.Instance.GetUpgradesValue(_monster.data.type, UpgradeType.SPEED);
+        fSpeed = speed;
+        for (int i = 0; i < speedMod.Count; i++)
+            fSpeed += speedMod[i] * speed;
+
     }
     public override void UpdateState(Monster _monster)
     {
@@ -32,7 +37,7 @@ public class MonsterActionRoam : MonsterActionState
         if (targetPos == null)
             NewRoamPosition(_monster);
 
-        _monster.transform.position += (targetPos - _monster.transform.position).normalized * speed * Time.deltaTime;
+        _monster.transform.position += (targetPos - _monster.transform.position).normalized * fSpeed * Time.deltaTime;
         _monster.visual.flipX = (targetPos - _monster.transform.position).normalized.x < 0;
 
         float dist = Vector2.Distance(_monster.transform.position, targetPos);

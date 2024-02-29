@@ -4,7 +4,7 @@ using DG.Tweening;
 
 public class MonsterActionCloseAttack : MonsterActionState
 {
-    public int damage;
+    public float baseAttackPercent;
     public float angle;
     public float radius;
 
@@ -52,7 +52,7 @@ public class MonsterActionCloseAttack : MonsterActionState
 
         if (Mathf.Abs(Vector2.Angle(direction, targetPos)) <= angle / 2)
             if (Vector2.Distance(_monster.transform.position, PlayerController.Instance.transform.position) <= radius)
-                PlayerController.Instance.TakeDamage(damage);
+                PlayerController.Instance.TakeDamage((int)(_monster.GetAttackValue() * baseAttackPercent));
 
         _monster.transform.DOPunchPosition(direction, 0.1f);
 
@@ -78,7 +78,11 @@ public class MonsterActionCloseAttack : MonsterActionState
 
     private void UnCastAttack(Monster _monster)
     {
+        List<float> attSpeedMod = MasterUpgradeManager.Instance.GetUpgradesValue(_monster.data.type, UpgradeType.ATTACK_SPEED);
         delay = attackSpeed;
+        for (int i = 0; i < attSpeedMod.Count; i++)
+            delay += attSpeedMod[i] * attackSpeed;
+
         isCasting = false;
         _monster.lockInState = false;
         _monster.animator.speed = 1;
@@ -89,7 +93,7 @@ public class MonsterActionCloseAttack : MonsterActionState
         MonsterActionCloseAttack copy = new MonsterActionCloseAttack();
 
         copy.condition = new List<MonsterActionCondition>(condition);
-        copy.damage = damage;
+        copy.baseAttackPercent = baseAttackPercent;
         copy.angle = angle;
         copy.radius = radius;
 

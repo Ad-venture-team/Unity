@@ -4,4 +4,5 @@ public enum UpgradeType
     DAMAGE = 1,
     ATTACK_SPEED = 2,
     SPEED = 3,
+    MAX_HEALTH = 4,
 }
