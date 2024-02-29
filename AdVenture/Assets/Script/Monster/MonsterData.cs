@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 
 [CreateAssetMenu(fileName ="M_",menuName ="Data/Monster")]
 public class MonsterData : ScriptableObject, IData
@@ -12,6 +13,8 @@ public class MonsterData : ScriptableObject, IData
 
     public int maxHealth;
     public int baseAttack;
+
+    public List<ItemResource> cost;
 
     public Sprite icon;
     public RuntimeAnimatorController animationController;
