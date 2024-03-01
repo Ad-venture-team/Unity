@@ -6,8 +6,11 @@ using System;
 [Serializable]
 public class MonsterActionFlee : MonsterActionState
 {
+    private const float threshold = 0.1f;
+
     public float speed;
     private float fSpeed;
+    private Vector3 targetPosition;
 
     public override void EnterState(Monster _monster)
     {
@@ -15,21 +18,27 @@ public class MonsterActionFlee : MonsterActionState
         fSpeed = speed;
         for (int i = 0; i < speedMod.Count; i++)
             fSpeed += speedMod[i] * speed;
+        targetPosition = _monster.transform.position;
     }
+
     public override void UpdateState(Monster _monster)
     {
         if (_monster.target == null)
             return;
 
-        //Voir pour mettre un A* ici
-        PathFinding pathTravel = new PathFinding(MapsManager.Instance.GetValidePlace(), _monster.gameObject.transform.position, _monster.target.position);
-        List<Vector3> place = pathTravel.FindHighestPath();
-        Vector3 goTo = place[0];
+        if (Vector3.Distance(targetPosition,_monster.transform.position) <= threshold)
+        {
+            //Voir pour mettre un A* ici
+            PathFinding pathTravel = new PathFinding(MapsManager.Instance.GetValidePlace(), _monster.gameObject.transform.position, _monster.target.position);
+            List<Vector3> place = pathTravel.FindHighestPath();
+            if (pathTravel.CheckCorner())
+            {
+                targetPosition = place[place.Count-1];
+            }
+            else targetPosition = pathTravel.FindHighestPath()[0];
+        }
 
-        Debug.Log(_monster.data.name + " Flee");
-
-        _monster.transform.position += (goTo - _monster.transform.position).normalized * fSpeed * Time.deltaTime;
-        _monster.visual.flipX = (goTo - _monster.transform.position).normalized.x < 0;
+        _monster.transform.position += (targetPosition - _monster.transform.position).normalized * fSpeed * Time.deltaTime;
     }
 
     public override MonsterActionState GetCopy()

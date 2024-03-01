@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class PathFinding
@@ -9,6 +11,7 @@ public class PathFinding
     private HashSet<Vector3> grid = new HashSet<Vector3>();
     Vector3 position = Vector3.zero;
     Vector3 destination = Vector3.zero;
+    Vector3 lastdestination = Vector3.zero;
     int moovPoint;
 
     public PathFinding(HashSet<Vector3> ValidePlace, Vector3 startPoint, Vector3 finalDestination)
@@ -16,7 +19,7 @@ public class PathFinding
         grid = ValidePlace;
         position = startPoint;
         destination = finalDestination;
-        moovPoint = 1;
+        moovPoint = 3;
     }
 
     public List<Vector3> FindLowestPath()
@@ -28,6 +31,7 @@ public class PathFinding
         List<Vector3> closedList = new List<Vector3>();
 
         opendList.Add(startingPoint);
+        bool check = CheckCorner();
 
         while (opendList.Count > 0)
         {
@@ -65,41 +69,73 @@ public class PathFinding
         Vector3 startingPoint = position;
         Vector3 endPoint = destination;
 
-        List<Vector3> opendList = GetNeighbourList(startingPoint);
-        Vector3 currentNode = GetHighestCostTile(opendList);
-        return new List<Vector3> { currentNode };
-        List<Vector3> closedList = new List<Vector3>();
+        Vector3 currentNode = position;
 
-        opendList.Add(startingPoint);
+        List<Vector3> finalList = new List<Vector3> {};
 
-        while (opendList.Count > 0)
+        while (finalList.Count < moovPoint)
         {
-            if (currentNode == endPoint || closedList.Count == moovPoint)
+            List<Vector3> test = GetNeighbourList(currentNode);
+            foreach (Vector3 neighbourt in test)
             {
-                closedList.Add(currentNode);
-                return CalculatePath(closedList);
-            }
-
-            opendList.Remove(currentNode);
-            closedList.Add(currentNode);
-
-            foreach (Vector3 neighbourt in GetNeighbourList(currentNode))
-            {
-                if (closedList.Contains(Vector3Int.FloorToInt(neighbourt))) continue;
+                if (finalList.Contains(Vector3Int.FloorToInt(neighbourt))) continue;
 
                 int tentativeGCalculate = CalculateDistanceCost(neighbourt, destination);
                 int finalDestiTry = CalculateDistanceCost(currentNode, destination);
-                if (tentativeGCalculate <= finalDestiTry)
+                if (tentativeGCalculate >= finalDestiTry -1) //pas sur
                 {
-                    if (!opendList.Contains(Vector3Int.FloorToInt(neighbourt)))
+                    if (!finalList.Contains(Vector3Int.FloorToInt(neighbourt)))
                     {
-                        opendList.Add(neighbourt);
+                        finalList.Add(neighbourt);
+                        currentNode = neighbourt;
                     }
                 }
             }
         }
 
-        return CalculatePath(closedList);
+        return finalList;
+
+
+        //List<Vector3> closedList = new List<Vector3>();
+
+        //opendList.Add(startingPoint);
+
+        //while (opendList.Count > 0)
+        //{
+        //    if (currentNode == endPoint || closedList.Count == moovPoint)
+        //    {
+        //        closedList.Add(currentNode);
+        //        return CalculatePath(closedList);
+        //    }
+
+        //    opendList.Remove(currentNode);
+        //    closedList.Add(currentNode);
+
+        //    foreach (Vector3 neighbourt in GetNeighbourList(currentNode))
+        //    {
+        //        if (closedList.Contains(Vector3Int.FloorToInt(neighbourt))) continue;
+
+        //        int tentativeGCalculate = CalculateDistanceCost(neighbourt, destination);
+        //        int finalDestiTry = CalculateDistanceCost(currentNode, destination);
+        //        if (tentativeGCalculate <= finalDestiTry)
+        //        {
+        //            if (!opendList.Contains(Vector3Int.FloorToInt(neighbourt)))
+        //            {
+        //                opendList.Add(neighbourt);
+        //            }
+        //        }
+        //    }
+        //}
+
+        //return CalculatePath(closedList);
+    }
+
+    public bool CheckCorner()
+    {
+
+        List<Vector3> opendList = GetNeighbourList(position);
+        if (opendList.Count == 3) return true;
+        return false;
     }
 
     private List<Vector3> CalculatePath(List<Vector3> ListEnd)
@@ -152,7 +188,16 @@ public class PathFinding
             neighbourList.Add(new Vector3(currentNode.x -1, currentNode.y - 1, 0));
         }
 
-        return neighbourList;
+        List<Vector3> shuffleList = new List<Vector3>();
+        int listCount = neighbourList.Count;
+        for(int i = 0; i < listCount; i++)
+        {
+            int randomElementInList = UnityEngine.Random.Range(0, neighbourList.Count);
+            shuffleList.Add(neighbourList[randomElementInList]);
+            neighbourList.Remove(neighbourList[randomElementInList]);
+        }
+
+        return shuffleList;
     }
 
     private int CalculateDistanceCost(Vector3 start, Vector3 destination)
