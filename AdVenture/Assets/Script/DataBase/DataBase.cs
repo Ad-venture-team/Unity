@@ -8,6 +8,7 @@ public class DataBase : SingletonBehaviour<DataBase>
     public Dictionary<int, TileData> tileData = new Dictionary<int, TileData>();
     public Dictionary<int, WeaponData> weaponData = new Dictionary<int, WeaponData>();
     public Dictionary<int, PlayerUpgradeData> upgradeData = new Dictionary<int, PlayerUpgradeData>();
+    public Dictionary<int, MasterUpgradeData> masterUpgradeData = new Dictionary<int, MasterUpgradeData>();
 
     void Awake()
     {

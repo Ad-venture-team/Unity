@@ -6,6 +6,7 @@ public class PlayerUpgradeData : ScriptableObject, IData
 {
     public int id;
     public string name;
+    public string desc;
     [SerializeReference] public List<PlayerUpgradeBehaviour> behaviours = new List<PlayerUpgradeBehaviour>();
 
     public void GetUpgrade()

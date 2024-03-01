@@ -32,4 +32,11 @@ public static class EventWatcher
     public static void DoAddMonsterUpgrade(float _value,UpgradeType _upgrade, MonsterType _type) => onAddMonsterUpgrade?.Invoke(_value, _upgrade, _type);
 
     #endregion
+
+    #region REQUEST
+
+    public static event Action onRequestPlayerUpgrade;
+    public static void DoRequestPlayerUpgrade() => onRequestPlayerUpgrade?.Invoke();
+
+    #endregion
 }
