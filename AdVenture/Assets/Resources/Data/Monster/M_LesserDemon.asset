@@ -14,7 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 2
   name: LesserDemon
-  maxHealth: 160
+  type: 0
+  maxHealth: 100
+  baseAttack: 25
+  cost: []
   icon: {fileID: 1817443210, guid: 1824cbaea8472a548bd0921254dc12f5, type: 3}
   animationController: {fileID: 9100000, guid: 4dd3b3f82e8232d40b7eefaf3fbd79cc, type: 2}
   actions:
@@ -40,7 +43,7 @@ MonoBehaviour:
       data:
         condition:
         - rid: 5281279065519554566
-        damage: 20
+        baseAttackPercent: 1
         radius: 2.5
         attackSpeed: 5
         previewTime: 2
@@ -64,7 +67,7 @@ MonoBehaviour:
       data:
         condition:
         - rid: 5281279065519554570
-        damage: 20
+        baseAttackPercent: 0.6
         angle: 360
         radius: 5
         attackSpeed: 3
