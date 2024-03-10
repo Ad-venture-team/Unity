@@ -28,8 +28,11 @@ public class MonsterActionChase : MonsterActionState
 
         if (Vector3.Distance(waypoint, _monster.transform.position) <= threshold)
         {
-            Vector2Int goTo = Pathfinding.Instance.GetPath(_monster.transform.position, _monster.target.position)[0];
-            waypoint = new Vector3(goTo.x, goTo.y, 0);
+            List<Vector2Int> path = Pathfinding.Instance.GetPath(_monster.transform.position, _monster.target.position);
+            if (path.Count == 0)
+                return;
+                Vector2Int goTo = path[0];
+                waypoint = new Vector3(goTo.x, goTo.y, 0);
         }
 
         _monster.transform.position += (waypoint - _monster.transform.position).normalized * fSpeed * Time.deltaTime;
