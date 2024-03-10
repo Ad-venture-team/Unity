@@ -12,6 +12,8 @@ public class TileData : ScriptableObject, IData
 
     public TileBase tileBase;
 
+    public bool isBlocking;
+
     public int GetId()
     {
         return id;

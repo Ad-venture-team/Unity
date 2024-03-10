@@ -1,260 +1,247 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 
-public class PathFinding
+public class Pathfinding : SingletonBehaviour<Pathfinding>
 {
-    private const int MOVE_COST = 1;
+    private HashSet<Node> grid = new HashSet<Node>();
+    private List<Vector2Int> path = new List<Vector2Int>();
+    private Heap<Node> open;
+    HashSet<Node> close = new HashSet<Node>();
+    private int[,] map;
+    Node origine;
+    Node target;
+    int roomSize; // equal to the number of tile in the room (width * height)
 
-    private HashSet<Vector3> grid = new HashSet<Vector3>();
-    Vector3 position = Vector3.zero;
-    Vector3 destination = Vector3.zero;
-    Vector3 lastdestination = Vector3.zero;
-    int moovPoint;
-
-    public PathFinding(HashSet<Vector3> ValidePlace, Vector3 startPoint, Vector3 finalDestination)
+    private void OnEnable()
     {
-        grid = ValidePlace;
-        position = startPoint;
-        destination = finalDestination;
-        moovPoint = 3;
+        EventWatcher.onNewRoom += RefreshGrid;
     }
 
-    public List<Vector3> FindLowestPath()
+    private void OnDisable()
     {
-        Vector3 startingPoint = position;
-        Vector3 endPoint = destination;
+        EventWatcher.onNewRoom -= RefreshGrid;
+    }
 
-        List<Vector3> opendList = new List<Vector3>();
-        List<Vector3> closedList = new List<Vector3>();
-
-        opendList.Add(startingPoint);
-        bool check = CheckCorner();
-
-        while (opendList.Count > 0)
-        {
-            Vector3 currentNode = GetLowestCostTile(opendList);
-            if (currentNode == endPoint || closedList.Count == moovPoint)
+    private void RefreshGrid(Room _room)
+    {
+        roomSize = _room.height * _room.width;
+        map = _room.map;
+        grid.Clear();
+        for (int x = 0; x < _room.width; x++)
+            for (int y = 0; y < _room.height; y++)
             {
-                closedList.Add(currentNode);
-                return CalculatePath(closedList);
+                Node newNode = new Node(new Vector2Int(x, y));
+                grid.Add(newNode);
             }
+    }
 
-            opendList.Remove(currentNode);
-            closedList.Add(currentNode);
+    public List<Vector2Int> GetPath(Vector2 _origine, Vector2 _target)
+    {
+        path = new List<Vector2Int>();
+        origine = GetNodeFromPosition(ConvertToVector2Int(_origine));
+        target = GetNodeFromPosition(ConvertToVector2Int(_target));
+        open = new Heap<Node>(roomSize);
+        open.Queue(origine);
+        origine.comeFrom = origine;
+        origine.cost = 0;
+        close = new HashSet<Node>();
+        close.Add(origine);
 
-            foreach (Vector3 neighbourt in GetNeighbourList(currentNode))
+        while (open.Count > 0)
+        {
+            Node current = open.Dequeue();
+
+            if (current.position == target.position)
+                break;
+
+            foreach (Node N in GetNeighbourSet(current))
             {
-                if (closedList.Contains(Vector3Int.FloorToInt(neighbourt))) continue;
+                int cost = current.cost + Heuristic(current,N); 
 
-                int tentativeGCalculate = CalculateDistanceCost(neighbourt, destination);
-                int finalDestiTry = CalculateDistanceCost(currentNode, destination);
-                if (tentativeGCalculate <= finalDestiTry)
+                if (!close.Contains(N) || (close.Contains(N) && cost < N.cost))
                 {
-                    if (!opendList.Contains(Vector3Int.FloorToInt(neighbourt)))
-                    {
-                        opendList.Add(neighbourt);
-                    }
+                    close.Add(N);
+                    N.cost = cost;
+                    N.priority = cost + Heuristic(target, N);
+                    N.comeFrom = current;
+                    open.Queue(N);
                 }
             }
         }
 
-        return CalculatePath(closedList);
+        Node currentNode = target;
+        while(currentNode.position != origine.position)
+        {
+            path.Add(currentNode.position);
+            currentNode = currentNode.comeFrom;
+        }
+        path.Reverse();
+        return path;
     }
 
-    public List<Vector3> FindHighestPath()
+    public List<Vector2Int> Flee(Vector2 _origine, Vector2 _target)
     {
-        Vector3 startingPoint = position;
-        Vector3 endPoint = destination;
+        path = new List<Vector2Int>();
+        origine = GetNodeFromPosition(ConvertToVector2Int(_origine));
+        target = GetNodeFromPosition(ConvertToVector2Int(_target));
+        int dist = Heuristic(origine, target) + 14;
+        open = new Heap<Node>(roomSize);
+        open.Queue(origine);
+        origine.comeFrom = origine;
+        origine.cost = 0;
+        close = new HashSet<Node>();
+        close.Add(origine);
 
-        Vector3 currentNode = position;
-
-        List<Vector3> finalList = new List<Vector3> {};
-
-        while (finalList.Count < moovPoint)
+        while (open.Count > 0)
         {
-            List<Vector3> test = GetNeighbourList(currentNode);
-            foreach (Vector3 neighbourt in test)
-            {
-                if (finalList.Contains(Vector3Int.FloorToInt(neighbourt))) continue;
+            Node current = open.Dequeue();
 
-                int tentativeGCalculate = CalculateDistanceCost(neighbourt, destination);
-                int finalDestiTry = CalculateDistanceCost(currentNode, destination);
-                if (tentativeGCalculate >= finalDestiTry -1) //pas sur
+            if (Heuristic(current, origine) > dist)
+                continue;
+          
+
+            foreach (Node N in GetNeighbourSet(current))
+            {
+                int cost = current.cost + Heuristic(current, N);
+
+
+                if (!close.Contains(N) || (close.Contains(N) && cost < N.cost))
                 {
-                    if (!finalList.Contains(Vector3Int.FloorToInt(neighbourt)))
-                    {
-                        finalList.Add(neighbourt);
-                        currentNode = neighbourt;
-                    }
+                    close.Add(N);
+                    N.cost = cost;
+                    N.priority = cost;
+                    N.comeFrom = current;
+                    open.Queue(N);
                 }
             }
         }
 
-        return finalList;
-
-
-        //List<Vector3> closedList = new List<Vector3>();
-
-        //opendList.Add(startingPoint);
-
-        //while (opendList.Count > 0)
-        //{
-        //    if (currentNode == endPoint || closedList.Count == moovPoint)
-        //    {
-        //        closedList.Add(currentNode);
-        //        return CalculatePath(closedList);
-        //    }
-
-        //    opendList.Remove(currentNode);
-        //    closedList.Add(currentNode);
-
-        //    foreach (Vector3 neighbourt in GetNeighbourList(currentNode))
-        //    {
-        //        if (closedList.Contains(Vector3Int.FloorToInt(neighbourt))) continue;
-
-        //        int tentativeGCalculate = CalculateDistanceCost(neighbourt, destination);
-        //        int finalDestiTry = CalculateDistanceCost(currentNode, destination);
-        //        if (tentativeGCalculate <= finalDestiTry)
-        //        {
-        //            if (!opendList.Contains(Vector3Int.FloorToInt(neighbourt)))
-        //            {
-        //                opendList.Add(neighbourt);
-        //            }
-        //        }
-        //    }
-        //}
-
-        //return CalculatePath(closedList);
-    }
-
-    public bool CheckCorner()
-    {
-
-        List<Vector3> opendList = GetNeighbourList(position);
-        if (opendList.Count == 3) return true;
-        return false;
-    }
-
-    private List<Vector3> CalculatePath(List<Vector3> ListEnd)
-    {
-        //foreach(Vector3 vecto in ListEnd)
-        //{
-        //    Debug.Log(vecto);
-        //}
-
-        return ListEnd;
-    }
-
-    private List<Vector3> GetNeighbourList(Vector3 currentNode)
-    {
-        List<Vector3> neighbourList = new List<Vector3>();
-        currentNode = new Vector3((int)currentNode.x, (int)currentNode.y, (int)currentNode.z);
-
-        if (grid.Contains(new Vector3(currentNode.x - 1, currentNode.y, 0)))
+        Node currentNode = origine;
+        int fleeCost = 0;
+        foreach (Node N in close)
         {
-            neighbourList.Add(new Vector3(currentNode.x - 1, currentNode.y, 0));
-        }
-        if (grid.Contains(new Vector3(currentNode.x + 1, currentNode.y, 0)))
-        {
-            neighbourList.Add(new Vector3(currentNode.x + 1, currentNode.y, 0));
-        }
-        if (grid.Contains(new Vector3(currentNode.x, currentNode.y - 1, 0)))
-        {
-            neighbourList.Add(new Vector3(currentNode.x, currentNode.y - 1, 0));
-        }
-        if (grid.Contains(new Vector3(currentNode.x, currentNode.y + 1, 0)))
-        {
-            neighbourList.Add(new Vector3(currentNode.x, currentNode.y + 1, 0));
-        }
-
-
-        if (grid.Contains(new Vector3(currentNode.x + 1, currentNode.y + 1, 0)))
-        {
-            neighbourList.Add(new Vector3(currentNode.x+1, currentNode.y + 1, 0));
-        }
-        if (grid.Contains(new Vector3(currentNode.x - 1, currentNode.y + 1, 0)))
-        {
-            neighbourList.Add(new Vector3(currentNode.x -1, currentNode.y + 1, 0));
-        }
-        if (grid.Contains(new Vector3(currentNode.x + 1, currentNode.y - 1, 0)))
-        {
-            neighbourList.Add(new Vector3(currentNode.x +1, currentNode.y - 1, 0));
-        }
-        if (grid.Contains(new Vector3(currentNode.x - 1, currentNode.y - 1, 0)))
-        {
-            neighbourList.Add(new Vector3(currentNode.x -1, currentNode.y - 1, 0));
-        }
-
-        List<Vector3> shuffleList = new List<Vector3>();
-        int listCount = neighbourList.Count;
-        for(int i = 0; i < listCount; i++)
-        {
-            int randomElementInList = UnityEngine.Random.Range(0, neighbourList.Count);
-            shuffleList.Add(neighbourList[randomElementInList]);
-            neighbourList.Remove(neighbourList[randomElementInList]);
-        }
-
-        return shuffleList;
-    }
-
-    private int CalculateDistanceCost(Vector3 start, Vector3 destination)
-    {
-        int xDistance = (int)Mathf.Abs(start.x - destination.x);
-        int yDistance = (int)Mathf.Abs(start.y - destination.y);
-        int remaining = (int)Mathf.Abs(xDistance - yDistance);
-        int goReturned = MOVE_COST * (int)Mathf.Min(xDistance, yDistance) + MOVE_COST * remaining;
-        return goReturned;
-    }
-
-    private int HeuristicTileCost(Vector3 _tile)
-    {
-        int gCost = (int)Vector2.Distance(position, _tile);
-        int hCost = (int)Vector2.Distance(destination, _tile);
-        int fCost = gCost + hCost;
-        return fCost;
-    }
-
-    private List<int> CalculateListFDistance(List<Vector3> openListDetected, Vector3 destination)
-    {
-        List<int> listReturn = new List<int>();
-        foreach (Vector3 vector in openListDetected)
-        {
-            listReturn.Add(CalculateDistanceCost(vector, destination));
-        }
-
-        return listReturn;
-    }
-
-    private Vector3 GetLowestCostTile(List<Vector3> tileList)
-    {
-        Vector3 lowestCstTile = tileList[0];
-
-        for (int i = 1; i < tileList.Count; i++)
-        {
-            if (CalculateDistanceCost(tileList[i], destination) < CalculateDistanceCost(lowestCstTile, destination))
+            int fCost = Heuristic(N, target);
+            if (fCost > fleeCost)
             {
-                lowestCstTile = tileList[i];
+                fleeCost = fCost;
+                currentNode = N;
+            }
+        }
+        //return GetPath(_origine, currentNode.position);
+        while (currentNode.position != origine.position)
+        {
+            path.Add(currentNode.position);
+            currentNode = currentNode.comeFrom;
+        }
+        path.Reverse();
+        return path;
+    }
+
+    private int Heuristic(Node a, Node b)
+    {
+        int x = Mathf.Abs(a.position.x - b.position.x);
+        int y = Mathf.Abs(a.position.y - b.position.y);
+
+        if (x > y)
+            return y * 14 + (x - y) * 10;
+
+        return x * 14 + (y - x) * 10;
+    }
+
+    private HashSet<Node> GetNeighbourSet(Node currentNode)
+    {
+        HashSet<Node> neighbourList = new HashSet<Node>();
+
+        for (int x = -1; x <= 1; x++)
+            for (int y = -1; y <= 1; y++)
+            {
+                if (x == 0 && y == 0)
+                    continue;
+
+                Vector2Int checkPos = new Vector2Int(currentNode.position.x + x, currentNode.position.y + y);
+
+                //TODO
+                //if (DataBase.Instance.tileData[map[checkPos.x, checkPos.y]].isBlocking)
+                //    continue;
+                Node checkNode = GetNodeFromPosition(checkPos);
+                if (checkNode != null)
+                    neighbourList.Add(checkNode);
+            }
+
+        return neighbourList;
+    }
+
+    private Node GetNodeFromPosition(Vector2Int _position)
+    {
+        foreach (Node N in grid)
+        {
+            if (N.position == _position)
+                return N;
+        }
+        return null;
+    }
+    private Vector2Int ConvertToVector2Int(Vector3 _toConvert)
+    {
+        return new Vector2Int((int)Math.Round(_toConvert.x), (int)Math.Round(_toConvert.y));
+    }
+    private Vector3 ConvertToVector3(Vector2Int _toConvert)
+    {
+        return new Vector3(_toConvert.x, _toConvert.y, 0);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        foreach (Node N in close)
+        {
+            Vector3 pos = ConvertToVector3(N.position);
+            Gizmos.DrawSphere(pos, .5f);
+        } 
+        Gizmos.color = Color.green;
+        foreach (Vector2Int V in path)
+        {
+            Vector3 pos = ConvertToVector3(V);
+            Gizmos.DrawSphere(pos, .5f);
+        }
+    }
+
+    private class Node : IHeapItem<Node>
+    {
+        public Vector2Int position;
+        public Node comeFrom;
+        public int cost; // gCost
+        public int priority; // fCost
+        int heapIndex;
+
+        public int HeapIndex
+        {
+            get
+            {
+                return heapIndex;
+            }
+            set
+            {
+                heapIndex = value;
             }
         }
 
-        return lowestCstTile;
-    }
-
-    private Vector3 GetHighestCostTile(List<Vector3> tileList)
-    {
-        Vector3 highestCstTile = tileList[0];
-
-        for (int i = 1; i < tileList.Count; i++)
+        public Node(Vector2Int _position)
         {
-            if (CalculateDistanceCost(tileList[i], destination) > CalculateDistanceCost(highestCstTile, destination))
-            {
-                highestCstTile = tileList[i];
-            }
+            position = _position;
         }
 
-        return highestCstTile;
+        public int CompareTo(Node other)
+        {
+            int compare = priority.CompareTo(other.priority);
+            if (compare == 0)
+                compare = cost.CompareTo(other.cost);
+            if (compare == 0)
+                compare = 1;
+
+            return -compare;
+        }
     }
 }

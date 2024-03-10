@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < n; i++)
         {
             int rand = RandomUtils.GetRandom(0, monsters.Count);
-            Vector2 pos = RandomUtils.RandomVector2(Vector2.zero, roomSize);
+            Vector2 pos = RandomUtils.RandomVector2(Vector2.one, roomSize - Vector2Int.one);
             MonsterData data = monsters[rand];
             RoomElement newRoomElem = new RoomElement();
             newRoomElem.id = data.id;

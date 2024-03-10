@@ -5,8 +5,10 @@ using System.Collections.Generic;
 [Serializable]
 public class MonsterActionChase : MonsterActionState
 {
+    private const float threshold = .2f;
     public float speed;
     private float fSpeed;
+    private Vector3 waypoint;
 
     public override void EnterState(Monster _monster)
     {
@@ -16,6 +18,7 @@ public class MonsterActionChase : MonsterActionState
         fSpeed = speed;
         for (int i = 0; i < speedMod.Count; i++)
             fSpeed += speedMod[i] * speed;
+        waypoint = _monster.transform.position;
     }
 
     public override void UpdateState(Monster _monster)
@@ -23,13 +26,14 @@ public class MonsterActionChase : MonsterActionState
         if (_monster.target == null)
             return;
 
-        //A*
-        PathFinding pathTravel = new PathFinding(MapsManager.Instance.GetValidePlace(), _monster.gameObject.transform.position, _monster.target.position);
-        Vector3 goTo = pathTravel.FindLowestPath()[1];
-        Debug.Log("Chase");
+        if (Vector3.Distance(waypoint, _monster.transform.position) <= threshold)
+        {
+            Vector2Int goTo = Pathfinding.Instance.GetPath(_monster.transform.position, _monster.target.position)[0];
+            waypoint = new Vector3(goTo.x, goTo.y, 0);
+        }
 
-        _monster.transform.position += (goTo - _monster.transform.position).normalized * fSpeed * Time.deltaTime;
-        _monster.visual.flipX = (goTo - _monster.transform.position).normalized.x < 0;
+        _monster.transform.position += (waypoint - _monster.transform.position).normalized * fSpeed * Time.deltaTime;
+        _monster.visual.flipX = (waypoint - _monster.transform.position).normalized.x < 0;
     }
 
     public override void ExitState(Monster _monster)

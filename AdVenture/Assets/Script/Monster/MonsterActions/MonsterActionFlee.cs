@@ -6,11 +6,11 @@ using System;
 [Serializable]
 public class MonsterActionFlee : MonsterActionState
 {
-    private const float threshold = 0.1f;
+    private const float threshold = 0.2f;
 
     public float speed;
     private float fSpeed;
-    private Vector3 targetPosition;
+    private Vector3 waypoint;
 
     public override void EnterState(Monster _monster)
     {
@@ -18,7 +18,7 @@ public class MonsterActionFlee : MonsterActionState
         fSpeed = speed;
         for (int i = 0; i < speedMod.Count; i++)
             fSpeed += speedMod[i] * speed;
-        targetPosition = _monster.transform.position;
+        waypoint = _monster.transform.position;
     }
 
     public override void UpdateState(Monster _monster)
@@ -26,19 +26,14 @@ public class MonsterActionFlee : MonsterActionState
         if (_monster.target == null)
             return;
 
-        if (Vector3.Distance(targetPosition,_monster.transform.position) <= threshold)
+        if (Vector3.Distance(waypoint, _monster.transform.position) <= threshold)
         {
-            //Voir pour mettre un A* ici
-            PathFinding pathTravel = new PathFinding(MapsManager.Instance.GetValidePlace(), _monster.gameObject.transform.position, _monster.target.position);
-            List<Vector3> place = pathTravel.FindHighestPath();
-            if (pathTravel.CheckCorner())
-            {
-                targetPosition = place[place.Count-1];
-            }
-            else targetPosition = pathTravel.FindHighestPath()[0];
+            Vector2Int goTo = Pathfinding.Instance.Flee(_monster.transform.position, _monster.target.position)[0];
+            waypoint = new Vector3(goTo.x, goTo.y, 0);
         }
 
-        _monster.transform.position += (targetPosition - _monster.transform.position).normalized * fSpeed * Time.deltaTime;
+        _monster.transform.position += (waypoint - _monster.transform.position).normalized * fSpeed * Time.deltaTime;
+        _monster.visual.flipX = (waypoint - _monster.transform.position).normalized.x > 0;
     }
 
     public override MonsterActionState GetCopy()

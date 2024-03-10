@@ -28,7 +28,7 @@ public class MapsManager : MonoBehaviour
     [SerializeField] private Tilemap wall;
     [SerializeField] private PolygonCollider2D camColider;
     [SerializeField] private CinemachineConfiner2D cinemachine;
-
+    public bool[,] walkableMap; 
 
     public HashSet<Vector3> GetValidePlace()
     {
@@ -84,6 +84,7 @@ public class MapsManager : MonoBehaviour
         Room createRoom = room;
         ground.ClearAllTiles();
         wall.ClearAllTiles();
+        walkableMap = new bool[room.width, room.height];
 
         for(int x = 0; x < createRoom.width; x++)
         {
@@ -91,6 +92,7 @@ public class MapsManager : MonoBehaviour
             {
 
                 ground.SetTile(new Vector3Int(x, y, 0), DataBase.Instance.tileData[createRoom.map[x, y]].tileBase);
+                walkableMap[x, y] = true;
             }
         }
 
